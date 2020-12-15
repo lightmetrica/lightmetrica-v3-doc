@@ -1,0 +1,847 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Error handling\n",
+    "\n",
+    "This test covers typical runtime error outputs from Lightmetrica."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:50.793707Z",
+     "iopub.status.busy": "2020-12-15T14:58:50.793307Z",
+     "iopub.status.idle": "2020-12-15T14:58:50.803144Z",
+     "shell.execute_reply": "2020-12-15T14:58:50.802261Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload\n",
+    "%autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:50.807232Z",
+     "iopub.status.busy": "2020-12-15T14:58:50.806169Z",
+     "iopub.status.idle": "2020-12-15T14:58:50.907117Z",
+     "shell.execute_reply": "2020-12-15T14:58:50.907862Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Namespace(bin_path='/lightmetrica-v3/_build/bin', path='/lightmetrica-v3', scene_path='/lm3/scenes')"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import lmenv\n",
+    "lmenv.load('.lmenv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:50.911297Z",
+     "iopub.status.busy": "2020-12-15T14:58:50.910288Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.225329Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.224665Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import traceback\n",
+    "import imageio\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "%matplotlib inline\n",
+    "import matplotlib.pyplot as plt\n",
+    "from mpl_toolkits.axes_grid1 import make_axes_locatable\n",
+    "import lightmetrica as lm"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.229345Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.228387Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.241712Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.241030Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext lightmetrica_jupyter"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Calling Lightmetrica API without initialization\n",
+    "\n",
+    "Calling Lightmetrica API without initialization causes an exception."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.245036Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.244277Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.255390Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.255697Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-8db5c42231d8>\", line 3, in <module>\n",
+      "    lm.info()\n",
+      "pylm.Exception: Lightmetrica is not initialize. Call lm::init() function. [err='Uninitialized']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # This causes an exception\n",
+    "    lm.info()\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.258885Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.258120Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.267851Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.267501Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Initializing Lightmetrica fixes the problem\n",
+    "lm.init()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### No outputs in Jupyter notebook\n",
+    "\n",
+    "Lightmetrica initializes default logger that outputs messages into standard output of the console. If you are using Jupyter notebook, you need to initialize the logger using `logger::jupyter`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.271982Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.270949Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.281716Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.282208Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# No output in Jupyter notebook\n",
+    "lm.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.285793Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.285155Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.294113Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.294429Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Initialize the logger with logger::jupyter\n",
+    "lm.log.init('jupyter')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.297749Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.297167Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.306563Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.306876Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.012] Lightmetrica -- Version 3.0.0 (rev. 7493edb) Linux x64\n"
+     ]
+    }
+   ],
+   "source": [
+    "lm.info()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Wrong asset name\n",
+    "\n",
+    "If you specify the wrong asset name, the framework will rause an exception."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.310620Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.310026Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.320750Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.321162Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.025] Loading asset [name='film1']\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[E|0.025] .. Missing component [key='film::bitmapp']. Check if\n",
+      "[E|0.025] .. - Key is wrong\n",
+      "[E|0.025] .. - Component with the key is not registered\n",
+      "[E|0.025] .. - Plugin containing the component is not loaded\n",
+      "[E|0.025] .. Failed to create an asset [name='film1', key='film::bitmapp']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # Wrong: bitmapp\n",
+    "    lm.load_film('film1', 'bitmapp', w=1920, h=1080)\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.324699Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.324088Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.413730Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.413353Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.039] Loading asset [name='film1']\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<pylm.Film at 0x7fda151006f0>"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Correct: bitmap\n",
+    "lm.load_film('film1', 'bitmap', w=1920, h=1080)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Invalid parameter\n",
+    "\n",
+    "The framework will cause an exception if you try to create an asset with invalid parameters.\n",
+    "The framework will *not* generate an error for the unnecessasry parameters."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.417818Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.417237Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.428527Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.428950Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.133] Loading asset [name='camera1']\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-a1a6ce96286e>\", line 7, in <module>\n",
+      "    aspect=16/9)\n",
+      "pylm.Exception: Missing property [name='vfov'] [err='InvalidArgumnt']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # vfov is missing\n",
+    "    lm.load_camera('camera1', 'pinhole',\n",
+    "        position=[0,0,5],\n",
+    "        center=[0,0,0],\n",
+    "        up=[0,1,0],\n",
+    "        aspect=16/9)\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.433170Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.432545Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.443339Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.443742Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.148] Loading asset [name='camera1']\n",
+      "[I|0.148] .. Asset [name='camera1'] has been already loaded. Replacing..\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-996ef482599d>\", line 8, in <module>\n",
+      "    fov=30)\n",
+      "pylm.Exception: Invalid JSON type [expected='array', actual='number'] [err='InvalidArgumnt']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    lm.load_camera('camera1', 'pinhole',\n",
+    "        # Parameter type is wrong. position must be an array.\n",
+    "        position=5,\n",
+    "        center=[0,0,0],\n",
+    "        up=[0,1,0],\n",
+    "        aspect=16/9,\n",
+    "        fov=30)\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.447445Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.446841Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.457873Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.458200Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.162] Loading asset [name='camera1']\n",
+      "[I|0.162] .. Asset [name='camera1'] has been already loaded. Replacing..\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<pylm.Camera at 0x7fda151064f0>"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# This is correct\n",
+    "lm.load_camera('camera1', 'pinhole',\n",
+    "    # Parameter type is wrong. position must be an array.\n",
+    "    position=[0,0,5],\n",
+    "    center=[0,0,0],\n",
+    "    up=[0,1,0],\n",
+    "    aspect=16/9,\n",
+    "    vfov=30)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Missing reference"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.462743Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.462154Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.473431Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.473849Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.177] Loading asset [name='mesh1']\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<pylm.Mesh at 0x7fda16b497f0>"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "lm.load_mesh('mesh1', 'raw',\n",
+    "    ps=[-1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1],\n",
+    "    ns=[0,0,1],\n",
+    "    ts=[0,0,1,0,1,1,0,1],\n",
+    "    fs={\n",
+    "        'p': [0,1,2,0,2,3],\n",
+    "        'n': [0,0,0,0,0,0],\n",
+    "        't': [0,1,2,0,2,3]\n",
+    "    })"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.477360Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.476765Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.486230Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.486641Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.192] Loading asset [name='accel']\n",
+      "[I|0.192] Loading asset [name='scene']\n"
+     ]
+    }
+   ],
+   "source": [
+    "accel = lm.load_accel('accel', 'sahbvh')\n",
+    "scene = lm.load_scene('scene', 'default', accel=accel)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.490021Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.489417Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.499414Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.499726Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[E|0.204] Invalid asset name [name='material1']\n",
+      "[E|0.204] Failed to find a component with locator [loc='$.assets.material1']\n",
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-6e7b5b5ddf78>\", line 3, in <module>\n",
+      "    scene.add_primitive(mesh='$.assets.mesh1', material='$.assets.material1')\n",
+      "pylm.Exception: You must specify both mesh and material. [err='InvalidArgumnt']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # material1 is undefined\n",
+    "    scene.add_primitive(mesh='$.assets.mesh1', material='$.assets.material1')\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.502945Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.502351Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.513542Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.513188Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.217] Loading asset [name='material1']\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<pylm.Material at 0x7fda151007b0>"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Define a missing asset\n",
+    "lm.load_material('material1', 'diffuse', Kd=[1,1,1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.516916Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.516206Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.526541Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.526192Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[E|0.231] Locator must start with '$' [loc='material1'].\n",
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-98eafc2758c2>\", line 3, in <module>\n",
+      "    scene.add_primitive(mesh='$.assets.mesh1', material='material1')\n",
+      "pylm.Exception: You must specify both mesh and material. [err='InvalidArgumnt']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # 'material1' is not a valid locator\n",
+    "    scene.add_primitive(mesh='$.assets.mesh1', material='material1')\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.529713Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.529126Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.538305Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.537909Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# This is correct\n",
+    "scene.add_primitive(mesh='$.assets.mesh1', material='$.assets.material1')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Rendering with invalid scene"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.541898Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.541308Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.550527Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.550933Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.256] Loading asset [name='renderer']\n"
+     ]
+    }
+   ],
+   "source": [
+    "renderer = lm.load_renderer('renderer', 'raycast',\n",
+    "    scene=scene,\n",
+    "    output='$.assets.film1',\n",
+    "    color=[0,0,0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.554273Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.553653Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.563076Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.563484Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-c4fa2525b4c8>\", line 3, in <module>\n",
+      "    renderer.render()\n",
+      "pylm.Exception: Missing camera primitive. Use lm::primitive() function to add camera primitive. [err='Unsupported']\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # Without camera\n",
+    "    renderer.render()\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.566939Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.565984Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.574865Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.575309Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Add camera primitive\n",
+    "scene.add_primitive(camera='$.assets.camera1')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.578536Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.577932Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.724958Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.725386Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.429] Processing [completed]\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Traceback (most recent call last):\n",
+      "  File \"<ipython-input-1-f0f29f69102c>\", line 3, in <module>\n",
+      "    renderer.render()\n",
+      "IndexError: vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    # With camera, but without build()\n",
+    "    renderer.render()\n",
+    "except Exception:\n",
+    "    traceback.print_exc()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.727907Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.727325Z",
+     "iopub.status.idle": "2020-12-15T14:58:51.738772Z",
+     "shell.execute_reply": "2020-12-15T14:58:51.739217Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.444] Building acceleration structure [name='accel']\n",
+      "[I|0.444] .. Flattening scene\n",
+      "[I|0.444] .. Building\n"
+     ]
+    }
+   ],
+   "source": [
+    "scene.build()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T14:58:51.742310Z",
+     "iopub.status.busy": "2020-12-15T14:58:51.741701Z",
+     "iopub.status.idle": "2020-12-15T14:58:52.441247Z",
+     "shell.execute_reply": "2020-12-15T14:58:52.441875Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|1.079] Processing [iter=1805200/2073600, progress=87.1%, ETA=0.1s]\n",
+      "[I|1.145] Processing [completed]\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'elapsed': 0.567709769}"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# OK\n",
+    "renderer.render()"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "formats": "ipynb,py:light",
+   "text_representation": {
+    "extension": ".py",
+    "format_name": "light",
+    "format_version": "1.5",
+    "jupytext_version": "1.3.3"
+   }
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

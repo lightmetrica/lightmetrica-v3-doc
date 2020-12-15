@@ -1,0 +1,314 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Performance testing of serialization\n",
+    "\n",
+    "This test checks the performance improvement of scene setup with serialization feature."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:20.670642Z",
+     "iopub.status.busy": "2020-12-15T15:09:20.670022Z",
+     "iopub.status.idle": "2020-12-15T15:09:20.759458Z",
+     "shell.execute_reply": "2020-12-15T15:09:20.760306Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import lmenv\n",
+    "env = lmenv.load('.lmenv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:20.764021Z",
+     "iopub.status.busy": "2020-12-15T15:09:20.762956Z",
+     "iopub.status.idle": "2020-12-15T15:09:21.070831Z",
+     "shell.execute_reply": "2020-12-15T15:09:21.071462Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import imageio\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import timeit\n",
+    "%matplotlib inline\n",
+    "import matplotlib.pyplot as plt\n",
+    "from mpl_toolkits.axes_grid1 import make_axes_locatable\n",
+    "import lmscene\n",
+    "import lightmetrica as lm"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:21.075319Z",
+     "iopub.status.busy": "2020-12-15T15:09:21.074637Z",
+     "iopub.status.idle": "2020-12-15T15:09:21.081641Z",
+     "shell.execute_reply": "2020-12-15T15:09:21.080833Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext lightmetrica_jupyter"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:21.085289Z",
+     "iopub.status.busy": "2020-12-15T15:09:21.084794Z",
+     "iopub.status.idle": "2020-12-15T15:09:21.089341Z",
+     "shell.execute_reply": "2020-12-15T15:09:21.088556Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.000] Lightmetrica -- Version 3.0.0 (rev. 7493edb) Linux x64\n"
+     ]
+    }
+   ],
+   "source": [
+    "lm.init()\n",
+    "lm.log.init('jupyter')\n",
+    "lm.progress.init('jupyter')\n",
+    "lm.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:21.092165Z",
+     "iopub.status.busy": "2020-12-15T15:09:21.091770Z",
+     "iopub.status.idle": "2020-12-15T15:09:21.094894Z",
+     "shell.execute_reply": "2020-12-15T15:09:21.094521Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "scene_names = lmscene.scenes_small()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:22.656601Z",
+     "iopub.status.busy": "2020-12-15T15:09:21.632172Z",
+     "iopub.status.idle": "2020-12-15T15:09:23.889970Z",
+     "shell.execute_reply": "2020-12-15T15:09:23.889573Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.017] Loading asset [name='film_output']\n",
+      "[I|0.095] Loading asset [name='accel']\n",
+      "[I|0.095] Loading asset [name='scene']\n",
+      "[I|0.095] Loading asset [name='camera_main']\n",
+      "[I|0.095] Loading asset [name='model_obj']\n",
+      "[I|0.095] .. Loading OBJ file [path='fireplace_room.obj']\n",
+      "[I|0.095] .. Loading MTL file [path='fireplace_room.mtl']\n",
+      "[I|0.422] .. Loading texture [path='wood.ppm']\n",
+      "[I|0.513] .. Loading texture [path='leaf.ppm']\n",
+      "[I|0.515] .. Loading texture [path='picture8.ppm']\n",
+      "[I|0.547] .. Loading texture [path='wood5.ppm']\n",
+      "[I|1.574] Loading asset [name='film_output']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|1.636] Loading asset [name='accel']\n",
+      "[I|1.636] Loading asset [name='scene']\n",
+      "[I|1.637] Loading asset [name='camera_main']\n",
+      "[I|1.637] Loading asset [name='model_obj']\n",
+      "[I|1.637] .. Loading OBJ file [path='CornellBox-Sphere.obj']\n",
+      "[I|1.637] .. Loading MTL file [path='CornellBox-Sphere.mtl']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|2.186] Loading asset [name='film_output']\n",
+      "[I|2.248] Loading asset [name='accel']\n",
+      "[I|2.248] Loading asset [name='scene']\n",
+      "[I|2.248] Loading asset [name='camera_main']\n",
+      "[I|2.248] Loading asset [name='model_obj']\n",
+      "[I|2.248] .. Loading OBJ file [path='cube.obj']\n",
+      "[I|2.248] .. Loading MTL file [path='default.mtl']\n",
+      "[I|2.248] .. Loading texture [path='default.png']\n"
+     ]
+    }
+   ],
+   "source": [
+    "scene_setup_time_df = pd.DataFrame(\n",
+    "    columns=['scene loading', 'serialization', 'deserialization'],\n",
+    "    index=scene_names)\n",
+    "for scene_name in scene_names:\n",
+    "    lm.reset()\n",
+    "    \n",
+    "    lm.load_film('film_output', 'bitmap', {\n",
+    "        'w': 1920,\n",
+    "        'h': 1080\n",
+    "    })\n",
+    "    \n",
+    "    # Load the scene without serialization\n",
+    "    def load_scene():\n",
+    "        accel = lm.load_accel('accel', 'sahbvh', {})\n",
+    "        scene = lm.load_scene('scene', 'default', {\n",
+    "            'accel': accel.loc()\n",
+    "        })\n",
+    "        lmscene.load(scene, env.scene_path, scene_name)\n",
+    "    loading_time_without_serialization = timeit.timeit(stmt=load_scene, number=1)\n",
+    "    scene_setup_time_df['scene loading'][scene_name] = loading_time_without_serialization\n",
+    "    \n",
+    "    # Export the internal state to a file\n",
+    "    def serialize_scene():\n",
+    "        lm.save_state_to_file('lm.serialized')\n",
+    "    serialization_time = timeit.timeit(stmt=serialize_scene, number=1)\n",
+    "    scene_setup_time_df['serialization'][scene_name] = serialization_time\n",
+    "    \n",
+    "    # Import the internal state from the serialized file\n",
+    "    lm.reset()\n",
+    "    def deserialize_scene():\n",
+    "        lm.load_state_from_file('lm.serialized')\n",
+    "    deserialization_time = timeit.timeit(stmt=deserialize_scene, number=1)\n",
+    "    scene_setup_time_df['deserialization'][scene_name] = deserialization_time"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2020-12-15T15:09:23.899279Z",
+     "iopub.status.busy": "2020-12-15T15:09:23.896421Z",
+     "iopub.status.idle": "2020-12-15T15:09:23.903810Z",
+     "shell.execute_reply": "2020-12-15T15:09:23.903425Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>scene loading</th>\n",
+       "      <th>serialization</th>\n",
+       "      <th>deserialization</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>fireplace_room</th>\n",
+       "      <td>0.504857</td>\n",
+       "      <td>0.593113</td>\n",
+       "      <td>0.373979</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>cornell_box_sphere</th>\n",
+       "      <td>0.00293069</td>\n",
+       "      <td>0.307084</td>\n",
+       "      <td>0.238235</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>cube</th>\n",
+       "      <td>0.0119118</td>\n",
+       "      <td>0.303239</td>\n",
+       "      <td>0.237676</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                   scene loading serialization deserialization\n",
+       "fireplace_room          0.504857      0.593113        0.373979\n",
+       "cornell_box_sphere    0.00293069      0.307084        0.238235\n",
+       "cube                   0.0119118      0.303239        0.237676"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "scene_setup_time_df"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "formats": "ipynb,py:light",
+   "text_representation": {
+    "extension": ".py",
+    "format_name": "light",
+    "format_version": "1.4",
+    "jupytext_version": "1.2.4"
+   }
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
