@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lightmetrica – Research-oriented renderer &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Lightmetrica – Research-oriented renderer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="lightmetrica-research-oriented-renderer">
+<h1>Lightmetrica – Research-oriented renderer<a class="headerlink" href="#lightmetrica-research-oriented-renderer" title="Permalink to this headline"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><cite>This project is under development for the initial release of Version 3. Please be careful using the versions in development because they might incur abrupt API changes.</cite></p>
+</div>
+<p>Welcome to Lightmetrica Version 3 documentation!
+This documentation includes <strong>guide</strong>, <strong>examples and tests</strong>, and <strong>references</strong>.</p>
+<p><strong>Guide</strong> explains basic to advanced usage of the framework, for instance how to build the framework from the source or how to render the images, or how to extend the framework.</p>
+<p><strong>Example and tests</strong> illustrates actual usage of the framework using Python/C++ API and the results of functional/performance/statistics tests. The examples and tests are written in a Jupyter notebook and the results are always executed in a CI build. It guarantees that the results are always generated from the working version of the framework. In other words, the broken documentation indicates a new commit ruined the runtime behavior of the framework.</p>
+<p><strong>References</strong> describe the explanation of the detailed API and the components of the framework. API reference describes function-wise or interface-wise features of the framework. It is especially useful when you want develop your own extensions. Build-in component references describes the built-in components of the interfaces such as materials or renderers. It also explains a brief background of the theory behind the component. This reference is useful when you want to use the renderer as a user.</p>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#installing-framework">Installing framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#using-pre-built-binaries">Using pre-built binaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#building-from-source">Building from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#editing-documentation">Editing documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#working-with-jupyter-notebook">Working with Jupyter notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build.html#working-with-docker-containers">Working with Docker containers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="managing_experiment.html#common-setup">Common setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing_experiment.html#use-case-framework-users">Use-case: Framework users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing_experiment.html#use-case-plugin-developers">Use-case: Plugin developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managing_experiment.html#use-case-framework-developers">Use-case: Framework developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#lightmetrica-api">Lightmetrica API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#importing-framework">Importing framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#loading-asset">Loading asset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#accessing-instance">Accessing instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#passing-instance-as-a-parameter">Passing instance as a parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#scene-setup-using-primitives">Scene setup using primitives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#scene-setup-using-scene-graph">Scene setup using scene graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#building-acceleration-structure">Building acceleration structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#rendering">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_rendering.html#checking-result">Checking result</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending_framework.html#component-interface">Component interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_framework.html#configuring-build-environment">Configuring build environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_framework.html#implementing-interface">Implementing interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_framework.html#using-extended-feature-from-python-api">Using extended feature from Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending_framework.html#on-advanced-topics">On advanced topics</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#modern-cmake">Modern CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#dependency-management">Dependency management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#supporting-add-submodule">Supporting add_submodule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_system.html#id1">Dependency management</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="component.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#creating-interface">Creating interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#implementing-interface">Implementing interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#creating-plugin">Creating plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#creating-instance">Creating instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#parameterized-creation">Parameterized creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#component-hierarchy-and-locator">Component hierarchy and locator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#weak-references">Weak references</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#querying-information">Querying information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#supporting-serialization">Supporting serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#singleton">Singleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component.html#changes-from-version-2">Changes from Version 2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python_binding.html#python-api">Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#notations">Notations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#scene-interaction-point">Scene interaction point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#point-geometry">Point geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#component-index">Component index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#ray-scene-intersection-query">Ray-scene intersection query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#local-ray-direction-sampling">Local ray/direction sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#transforming-probability-densities">Transforming probability densities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#bidirectional-path-sampling">Bidirectional path sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path_sampling.html#summary-of-notations">Summary of notations</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="test.html#test-types">Test types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html#executing-tests">Executing tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_blank.html">Rendering blank image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_quad.html">Rendering quad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_raycast.html">Raycasting a scene with OBJ models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_pt.html">Rendering with path tracing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_custom_renderer.html">Rendering with custom renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_serialization.html">Rendering with serialized assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/example_cpp.html">C++ examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_render_all.html">Rendering all scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_accel_consistency.html">Checking consistency of acceleration structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_error_handling.html">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_obj_loader_consistency.html">Checking consistency of OBJ loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_render_instancing.html">Rendering with instanced geometries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_serial_consistency.html">Checking consistency of serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_update_asset.html">Updating already-loaded material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_scheduler.html">Scheduler for rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_materials.html">Materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_lights.html">Lights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/func_renderers.html">Renderers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/perf_accel.html">Performance testing of acceleration structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/perf_obj_loader.html">Performance testing of OBJ loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="executed_functest/perf_serial.html">Performance testing of serialization</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#material">Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#camera">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#light">Light</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#medium">Medium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#volume">Volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#phase">Phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#mesh">Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#acceleration-structure">Acceleration structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="component_ref.html#film">Film</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#user">User</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#log">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#exception">Exception</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#parallel">Parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#progress">Progress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#debug">Debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#json">Json</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#math">Math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#obj-loader">OBJ loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#acceleration-structure">Acceleration structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#scene">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#renderer">Renderer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#camera">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#film">Film</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#light">Light</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#participating-medium">Participating medium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#volume-data">Volume data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#material">Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#phase-function">Phase function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#mesh">Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ref.html#path-sampling">Path sampling</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

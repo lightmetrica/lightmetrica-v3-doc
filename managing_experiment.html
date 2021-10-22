@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Managing experiments &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic rendering" href="basic_rendering.html" />
+    <link rel="prev" title="Build" href="build.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Managing experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#common-setup">Common setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-case-framework-users">Use-case: Framework users</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-lmenv-module">Using <code class="docutils literal notranslate"><span class="pre">lmenv</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-multiple-profile">Managing multiple profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-directory-as-a-git-repository">Managing directory as a git repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-platform-development">Multi-platform development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#use-case-plugin-developers">Use-case: Plugin developers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-build">Managing build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debugging-experiments">Debugging experiments</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#in-windows">In Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#use-case-framework-developers">Use-case: Framework developers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Directory structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partially-replacing-dependencies">Partially replacing dependencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Managing experiments</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/managing_experiment.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="managing-experiments">
+<span id="id1"></span><h1>Managing experiments<a class="headerlink" href="#managing-experiments" title="Permalink to this headline"></a></h1>
+<p>Lightmetrica is designed to capable of conducting various experiments in rendering.
+In this section, we will introduce the patterns for typical experimental setups using Lightmetrica.</p>
+<p>We will suggest several use-cases of the typical experimental setups. Please jump to the corresponding sections according to your requirements.</p>
+<div class="section" id="common-setup">
+<h2>Common setup<a class="headerlink" href="#common-setup" title="Permalink to this headline"></a></h2>
+<p>In either cases, you want to setup conda environment to install the dependencies necessary to build Lightmetrica from source. We recommend to create multiple environment if you have multiple experiments
+that depends on different versions (thus different dependencies) of the framework. Multiple environments can easily co-exist by assigning the environments with the different names.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> &lt;<span class="nb">source</span> directory&gt;
+<span class="gp">$ </span>conda env create -n &lt;name of the environment&gt; -f environment.yml
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you omit <code class="docutils literal notranslate"><span class="pre">-n</span></code> option, the default name <code class="docutils literal notranslate"><span class="pre">lm3_dev</span></code> is used.</p>
+</div>
+<p>Creating environment includes downloading all dependencies and should take some time.
+Once it is finished, you can activate the environment with</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda activate &lt;name of the environment&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you try to activate the environment at the first time,
+depending on the conda version and your environment, you might be asked to call initial setup command <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">init</span></code>.</p>
+</div>
+</div>
+<div class="section" id="use-case-framework-users">
+<span id="use-case-for-framework-users"></span><h2>Use-case: Framework users<a class="headerlink" href="#use-case-framework-users" title="Permalink to this headline"></a></h2>
+<p>This option is suitable for the <em>user</em> of the framework.
+You want to choose this option if your requirements are</p>
+<ul class="simple">
+<li><p>not to develop a plugin to conduct your experiments,</p></li>
+<li><p>and to use pre-release feature that only accessible from the latest source.</p></li>
+</ul>
+<div class="section" id="directory-structure">
+<h3>Directory structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline"></a></h3>
+<p>In this option, we suggest to use the following directory structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- project_root/                 # (1)
+    - your_experiment_1.ipynb   # (2)
+    - your_experiment_2.ipynb
+    - ...
+    - lightmetrica-v3/          # (3)
+        - build/                # (4)
+        - build_docker/         # (4-2)
+        - ...
+    - lmenv.py                  # (5)
+    - .lmenv                    # (6)
+    - .lmenv_docker             # (6-2)
+    - .lmenv_debug              # (6-3)
+    - ...
+    - .gitignore                # (7)
+</pre></div>
+</div>
+<p>The project root directory (1) manages all the experiments related codes (2) and cloned instance of Lightmetrica <em>inside</em> the project directory (3). We recommend this configuration because different projects might depends on the feature from the different versions of the framework.
+The framework is build under the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory (4). Refer to <a class="reference internal" href="build.html#building-from-source"><span class="std std-ref">Building from source</span></a> for the instruction of how to build the framework.</p>
+</div>
+<div class="section" id="using-lmenv-module">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">lmenv</span></code> module<a class="headerlink" href="#using-lmenv-module" title="Permalink to this headline"></a></h3>
+<p>In order to utilize Lightmetrica from the experimental scripts, the scripts needs to be able to find appropriate Lightmetrica distribution in the Python’s module search path (see also <a class="reference internal" href="build.html#working-with-jupyter-notebook"><span class="std std-ref">Working with Jupyter notebook</span></a>). To reduce a burden, we recommend to use <code class="docutils literal notranslate"><span class="pre">lmenv</span></code> module (5), which can be found in <code class="docutils literal notranslate"><span class="pre">functest</span></code> directory of the repository. You can copy and paste that module to your project directory.</p>
+<p>The module provides <code class="docutils literal notranslate"><span class="pre">lmenv.load()</span></code> function that takes the path to the configuration file containing paths to the Lightmetria distribution:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">lmenv</span>
+   <span class="o">...</span><span class="p">:</span> <span class="n">env</span> <span class="o">=</span> <span class="n">lmenv</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;.lmenv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> is a JSON file containing a object whose elements are specifying paths to the Lightmetrica distribution and binaries. It reads for instance:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/project_root/lightmetrica-v3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bin_path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/project_root/lightmetrica-v3/build/bin/Release&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;scene_path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/scene_directory&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file must contain at least two elements: (a) <code class="docutils literal notranslate"><span class="pre">path</span></code> specifying the path to the root directory of Lightmetrica, (b) <code class="docutils literal notranslate"><span class="pre">bin_path</span></code> specifying the path to the binary directory of Lightmetrica. Aside from them, the file can include any information that might be used globally among the experiments (e.g., path to the scene directory). The loaded elements can be accesed via namespace under <code class="docutils literal notranslate"><span class="pre">env</span></code>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">env</span><span class="o">.</span><span class="n">scene_path</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="s1">&#39;c:/path/to/scene_directory&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="managing-multiple-profile">
+<h3>Managing multiple profile<a class="headerlink" href="#managing-multiple-profile" title="Permalink to this headline"></a></h3>
+<p>If you prepare multiple <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> files you can configure multiple profiles in the same directory. This is useful for instance when you want to conduct the same experiment in docker environment (6-2), or create profiles for different build configurations such as Release, Debug, etc. (6-3)</p>
+</div>
+<div class="section" id="managing-directory-as-a-git-repository">
+<h3>Managing directory as a git repository<a class="headerlink" href="#managing-directory-as-a-git-repository" title="Permalink to this headline"></a></h3>
+<p>You can manage a project directory as a git repository. To do this, you want to configure appropriate <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> file (7) excluding <code class="docutils literal notranslate"><span class="pre">lightmetrica-v3</span></code> directory and machine-specific files like <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code>, since it may include machine-specific fullpaths. Alternatively, you can add lightmetrica-v3 as a submodule.</p>
+<p>Also, <a class="reference external" href="https://github.com/mwouts/jupytext">jupytext</a> Jupyter notebook extension is useful to maange Jupyter notebooks inside a git repository. The extension is already installed if you have the environment via <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code>.</p>
+</div>
+<div class="section" id="multi-platform-development">
+<h3>Multi-platform development<a class="headerlink" href="#multi-platform-development" title="Permalink to this headline"></a></h3>
+<p>Assume we are using Windows environment (with Msys’s bash) and also want to conduct the experiment in Linux environment using docker with the same revision of the code cloned into <code class="docutils literal notranslate"><span class="pre">lightmetrica-v3</span></code> directory (3). For a docker image, we use <code class="docutils literal notranslate"><span class="pre">Dockerfile.conda</span></code> distributed along with the framework. We assume we created <code class="docutils literal notranslate"><span class="pre">lm3_dev</span></code> image following the instruction in <a class="reference internal" href="build.html#dockerfile-only-with-dependencies"><span class="std std-ref">Dockerfile only with dependencies</span></a>.</p>
+<p>The following command executes a new container with an interactive session:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>winpty docker run --rm -p <span class="m">10000</span>:8888 <span class="se">\</span>
+    -v &lt;<span class="nb">local</span> projects directory&gt;:/projects -it lm3_dev
+</pre></div>
+</div>
+<p>We used <code class="docutils literal notranslate"><span class="pre">-v</span></code> option to share the local project directory containing <code class="docutils literal notranslate"><span class="pre">project_root</span></code> (1). We recommend to share parent directory as well as the project directory, because we might want to share also the shared resources like scenes. We used <code class="docutils literal notranslate"><span class="pre">-p</span></code> option to expose the port 8888 as a local port 10000 to use Jupyter notebook running inside the container.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please be careful that the full path must start with <code class="docutils literal notranslate"><span class="pre">//c/</span></code> instead of <code class="docutils literal notranslate"><span class="pre">c:/</span></code> and
+we must use <code class="docutils literal notranslate"><span class="pre">winpty</span></code> to use interactive session in Msys’s bash.</p>
+</div>
+<p>Then we can build the framework being accessed through the shared volume. For detail, see <a class="reference internal" href="build.html#building-from-source"><span class="std std-ref">Building from source</span></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">cd</span> /projects/project_root/lightmetrica-v3
+<span class="gp"># </span>mkdir build_docker
+<span class="gp"># </span>...
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">lm3_dev</span></code> image already installed dependencies to execute Jupyter notebook inside the docker container. You can execute the same experimental scripts from inside the docker container. Some options were necessary to prevent privilege errors or just for convenience.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">cd</span> /projects/project_root
+<span class="gp"># </span>jupyter notebook --ip<span class="o">=</span><span class="m">0</span>.0.0.0 --allow-root --NotebookApp.token<span class="o">=</span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Then you can access the notebooks from <code class="docutils literal notranslate"><span class="pre">http://localhost:10000</span></code> from the brower in the host.</p>
+<p>For the experimental scripts, you can use <code class="docutils literal notranslate"><span class="pre">.lmenv_docker</span></code> file (6-2) to configure the path to the binaries. Note that you must specify absolute paths inside the container.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/projects/project_root/lightmetrica-v3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bin_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/projects/project_root/lightmetrica-v3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;scene_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/projects/...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="use-case-plugin-developers">
+<h2>Use-case: Plugin developers<a class="headerlink" href="#use-case-plugin-developers" title="Permalink to this headline"></a></h2>
+<p>This options is suitable if the requirements are</p>
+<ul class="simple">
+<li><p>to develop your own plugin to conduct your experiments,</p></li>
+<li><p>but not to want to modify the code of the framework itself.</p></li>
+</ul>
+<p>Note that this option shares many patterns in <a class="reference internal" href="#use-case-for-framework-users"><span class="std std-ref">Use-case: Framework users</span></a>, which we will not repeat the explanation in this section.</p>
+<div class="section" id="id2">
+<h3>Directory structure<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>The recommended directory structure is almost same as what we saw in <a class="reference internal" href="#use-case-for-framework-users"><span class="std std-ref">Use-case: Framework users</span></a>, yet we moved <code class="docutils literal notranslate"><span class="pre">build</span></code> directory (1) to just under the project root.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- project_root/
+    - build/                    # (1)
+    - CMakeLists.txt            # (2)
+    - your_plugin_1.cpp         # (3)
+    - ...
+    - your_experiment_1.ipynb   # Experimental scripts
+    - your_experiment_2.ipynb
+    - ...
+    - lightmetrica-v3/          # Framework clone
+    - lmenv.py                  # Helper module to find the framework
+    - .lmenv                    # Machine-dependent configuration
+    - .lmenv_debug              # (4)
+    - ...
+    - .gitignore
+</pre></div>
+</div>
+</div>
+<div class="section" id="managing-build">
+<span id="id3"></span><h3>Managing build<a class="headerlink" href="#managing-build" title="Permalink to this headline"></a></h3>
+<p>Although it is possible to directly add your codes to the framework directory under <code class="docutils literal notranslate"><span class="pre">lightmetrica-v3</span></code>,
+we recommend to separate your plugin codes (3) to the outside of the framework directory unless necessary. This simplifies the management of your plugin codes via separated repository, and avoids possible merging burdens due to the upcoming updates of the framework.</p>
+<p>We create <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> to manage the build of the framework and your plugins. In CMakeLists, Lightmetrica supports direct inclusion of the directory via <code class="docutils literal notranslate"><span class="pre">add_subdirectory</span></code>. Your <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> would look like</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.10</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">your_experimental_project</span><span class="p">)</span>
+
+<span class="c"># Add Lightmetrica via add_subdirectory</span>
+<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">lightmetrica-v3</span><span class="p">)</span>
+
+<span class="c"># Craete plugins</span>
+<span class="nb">add_library</span><span class="p">(</span><span class="s">my_plugin</span> <span class="s">MODULE</span> <span class="s2">&quot;your_plugin_1.cpp&quot;</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_plugin</span> <span class="s">PRIVATE</span> <span class="s">lightmetrica::liblm</span><span class="p">)</span>
+<span class="nb">set_target_properties</span><span class="p">(</span><span class="s">my_plugin</span> <span class="s">PROPERTIES</span> <span class="s">DEBUG_POSTFIX</span> <span class="s2">&quot;-debug&quot;</span><span class="p">)</span>
+<span class="nb">set_target_properties</span><span class="p">(</span><span class="s">my_plugin</span> <span class="s">PROPERTIES</span>
+    <span class="s">LIBRARY_OUTPUT_DIRECTORY</span> <span class="s2">&quot;${CMAKE_BINARY_DIR}/bin&quot;</span><span class="p">)</span>
+<span class="c"># ...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">my_plugin</span></code> is the target for your plugin. The library type should be <code class="docutils literal notranslate"><span class="pre">MODULE</span></code> because a plugin is dynamically loaded from the framework. Linking the target against <code class="docutils literal notranslate"><span class="pre">lightmetrica::liblm</span></code> allows the target to access the features of Lightmetrica.</p>
+<p>You can build this project similarly as we described in <a class="reference internal" href="build.html#building-from-source"><span class="std std-ref">Building from source</span></a>. For instance, in Windows environment (with Msys’s bash):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> &lt;project_root&gt;
+<span class="gp">$ </span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+<span class="gp">$ </span>cmake -G <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> ..
+<span class="gp">$ </span>start your_experimental_project.sln
+</pre></div>
+</div>
+<p>Note that solution name is not <code class="docutils literal notranslate"><span class="pre">lightmetrica.sln</span></code> but <code class="docutils literal notranslate"><span class="pre">your_experimental_project.sln</span></code> as you wrote in <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>. You also want to configure <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file to the appropriate path to the build directory.</p>
+<p>In your experimental scripts, you can load your plugin via <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::loadPlugin()</span></code> function. We assume we already configured <code class="docutils literal notranslate"><span class="pre">env</span></code> with <code class="docutils literal notranslate"><span class="pre">lmenv.load()</span></code> function.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">lm</span><span class="o">.</span><span class="n">comp</span><span class="o">.</span><span class="n">loadPlugin</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">bin_path</span><span class="p">,</span> <span class="s1">&#39;my_plugin&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once you execute the <code class="docutils literal notranslate"><span class="pre">loadPlugin</span></code> function, the Python process locks the shared library from further modification, which causes a compilation error when you update the code. To prevent this, you want to restart the kernel before compilation (<code class="docutils literal notranslate"><span class="pre">Kernel</span> <span class="pre">&gt;</span> <span class="pre">Restart</span></code> from the menu, or shortcut <code class="docutils literal notranslate"><span class="pre">0-0</span></code>).</p>
+</div>
+</div>
+<div class="section" id="debugging-experiments">
+<h3>Debugging experiments<a class="headerlink" href="#debugging-experiments" title="Permalink to this headline"></a></h3>
+<div class="section" id="in-windows">
+<h4>In Windows<a class="headerlink" href="#in-windows" title="Permalink to this headline"></a></h4>
+<p>You might want to debug your plugin to fix bugs using a debugger.
+In this section, we will describe how to debug a plugin using Visual Studio debugger.</p>
+<p>To do this, you want to first build the framework and your plugin in <code class="docutils literal notranslate"><span class="pre">Debug</span></code> build configuration.
+To manage the path to the debug binaries, we recommend to create another <code class="docutils literal notranslate"><span class="pre">.lmenv_debug</span></code> file containing path to the debug binary path (4):</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/project_root/lightmetrica-v3&quot;</span><span class="p">,</span>
+<span class="hll">    <span class="nt">&quot;bin_path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/project_root/build/bin/Debug&quot;</span><span class="p">,</span>
+</span>    <span class="nt">&quot;scene_path&quot;</span><span class="p">:</span> <span class="s2">&quot;c:/path/to/scene_directory&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can easily switch two profiles by directly changing the string in the experimental script to</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">lmenv</span>
+   <span class="o">...</span><span class="p">:</span> <span class="n">env</span> <span class="o">=</span> <span class="n">lmenv</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;.lmenv_debug&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You must restart the kernel after you modify a reference to <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file,
+since Python process holds a reference to the binary in the previously specified <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file.</p>
+</div>
+<p>The experimental scripts are written in Python and executed in a Jupyter notebook. To debug the dynamically loaded plugin from the framework, you thus need to use <code class="docutils literal notranslate"><span class="pre">Attach</span> <span class="pre">to</span> <span class="pre">Process</span></code> feature of Visual Studio debugger (from menu, <code class="docutils literal notranslate"><span class="pre">Debug</span> <span class="pre">&gt;</span> <span class="pre">Attach</span> <span class="pre">to</span> <span class="pre">Process...</span></code>). However, this feature needs to locate the Python process you are currently focusing on. Typically you will find multiple Python processes in the list and cannot identify which is the process to which you want to attach by name. You can also use a process ID to locate the process, which can be obtained by calling <code class="docutils literal notranslate"><span class="pre">os.getpid()</span></code> function from inside the notebook.</p>
+<p>However, you need to iterate this process once you restarted the kernel since the process ID changes every time. Also, since you need to restart the kernel every time you update the binary, you need to iterate this process every time you recompile the code. Using recently added feature of <code class="docutils literal notranslate"><span class="pre">Reattach</span> <span class="pre">to</span> <span class="pre">Process</span></code> is also not usable, because it detects the previously attached process by name (there’s always multple choices) or process ID (changes every time).</p>
+<p>To resolve the problem, we provide <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::debug::attachToDebugger()</span></code> function to attach to the debugger from the Python code. Once the function is called, it opens a dialog to select an instance of Visual Studio (<code class="docutils literal notranslate"><span class="pre">vsjitdebugger.exe</span></code>). You want to select the opening Visual Studio instance and press Yes, then the debugger is launched with the Python process being attached to the debugger.</p>
+<p>Typically, you want to call this function only if you are running the code with Debug or RelWithDebInfo build configuations, which can be checked by examing <code class="docutils literal notranslate"><span class="pre">lm.BuildConfig</span></code>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="k">if</span> <span class="n">lm</span><span class="o">.</span><span class="n">BuildConfig</span> <span class="o">!=</span> <span class="n">lm</span><span class="o">.</span><span class="n">ConfigType</span><span class="o">.</span><span class="n">Release</span><span class="p">:</span>
+   <span class="o">...</span><span class="p">:</span>     <span class="n">lm</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">attachToDebugger</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::debug::attachToDebugger()</span></code> uses Windows specific feature thus is only supported in Windows environment.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="use-case-framework-developers">
+<h2>Use-case: Framework developers<a class="headerlink" href="#use-case-framework-developers" title="Permalink to this headline"></a></h2>
+<p>This option is suitable if</p>
+<ul class="simple">
+<li><p>you need to modify the framework to implement your experiments,</p></li>
+<li><p>or you are a contributor of this project</p></li>
+</ul>
+<div class="section" id="id4">
+<h3>Directory structure<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p>The recommended directory structure is same as <a class="reference internal" href="#use-case-for-framework-users"><span class="std std-ref">Use-case: Framework users</span></a>. However, in this case, the code and directory structures under <code class="docutils literal notranslate"><span class="pre">lightmetrica-v3</span></code> direction can be also modified.</p>
+<p>When you are a contributor who wants to add a new feature to the framework, we recommend to follow this directory structure even if the most of modifications happens under <code class="docutils literal notranslate"><span class="pre">lightmetrica-v3/src</span></code> directory, because in the course of development you might (always) need to write experimental scripts (mostly one-shot scripts) that we don’t want to include in the framework’s repository.</p>
+</div>
+<div class="section" id="partially-replacing-dependencies">
+<h3>Partially replacing dependencies<a class="headerlink" href="#partially-replacing-dependencies" title="Permalink to this headline"></a></h3>
+<p>Sometime you want to replace the dependencies automatically installed by <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code>. For instance, when you want to use patched version of <a class="reference external" href="https://github.com/embree/embree">embree</a> library, you need to replace default <code class="docutils literal notranslate"><span class="pre">embree</span></code> distribution by conda with your own version.</p>
+<p>We can achieve this by providing additional argument <code class="docutils literal notranslate"><span class="pre">&lt;package</span> <span class="pre">name&gt;_DIR</span></code> to cmake command. For instance, in Windows environment:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> &lt;your modified library&gt;
+<span class="gp">$ </span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+<span class="gp">$ </span>cmake -G <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="se">\</span>
+        -D <span class="nv">CMAKE_INSTALL_PREFIX</span><span class="o">=</span>&lt;install directory&gt;
+<span class="gp">$ </span>cmake --build _build --config Release --target install
+<span class="gp">$ </span><span class="nb">cd</span> &lt;project_root&gt;/build
+<span class="gp">$ </span>cmake -G <span class="s2">&quot;Visual Studio 15 2017 Win64&quot;</span> <span class="se">\</span>
+        -D &lt;package name&gt;_DIR<span class="o">=</span>&lt;install directory&gt; ..
+</pre></div>
+</div>
+<p>The first cmake command configures the modified version of the library, followed by build and install in the second cmake command. Next we build the framework and plugins by replacing the package with the modified version. Here, <code class="docutils literal notranslate"><span class="pre">&lt;package</span> <span class="pre">name&gt;_DIR</span></code> must be set so that the search proceidure of <code class="docutils literal notranslate"><span class="pre">find_package</span></code> command can find <code class="docutils literal notranslate"><span class="pre">*Config.cmake</span></code> file located in install directory of the package. For detail, consult the <a class="reference external" href="https://cmake.org/cmake/help/git-master/command/find_package.html">reference of find_package command</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please be careful that some packages depend on transitive dependencies. For instance, <code class="docutils literal notranslate"><span class="pre">embree</span></code> depends on <code class="docutils literal notranslate"><span class="pre">tbb</span></code>, which is also installed as a conda package. This implies when you build your own version of the library, <em>you need to use the transitive dependencies being installed as conda packages</em>. Otherwise inconsistencies will happen.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some packages cannot be replaced by providing <code class="docutils literal notranslate"><span class="pre">&lt;package</span> <span class="pre">name&gt;_DIR</span></code> because the source directory is directly included as a submodule. In this case, you want to replace the submodule to your own version.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="build.html" class="btn btn-neutral float-left" title="Build" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="basic_rendering.html" class="btn btn-neutral float-right" title="Basic rendering" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

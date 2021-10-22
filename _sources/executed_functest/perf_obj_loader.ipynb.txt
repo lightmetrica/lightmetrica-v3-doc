@@ -1,0 +1,362 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "034672cc",
+   "metadata": {},
+   "source": [
+    "## Performance testing of OBJ loader"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "627ca9a8",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:17.530873Z",
+     "iopub.status.busy": "2021-10-22T11:45:17.530200Z",
+     "iopub.status.idle": "2021-10-22T11:45:17.541385Z",
+     "shell.execute_reply": "2021-10-22T11:45:17.540862Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload\n",
+    "%autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "82805b32",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:17.545058Z",
+     "iopub.status.busy": "2021-10-22T11:45:17.544401Z",
+     "iopub.status.idle": "2021-10-22T11:45:17.641699Z",
+     "shell.execute_reply": "2021-10-22T11:45:17.642119Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import lmenv\n",
+    "env = lmenv.load('.lmenv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "d7374839",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:17.645328Z",
+     "iopub.status.busy": "2021-10-22T11:45:17.644624Z",
+     "iopub.status.idle": "2021-10-22T11:45:17.956241Z",
+     "shell.execute_reply": "2021-10-22T11:45:17.955789Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import imageio\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import timeit\n",
+    "import lmscene\n",
+    "import lightmetrica as lm"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "5476f08f",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:17.960075Z",
+     "iopub.status.busy": "2021-10-22T11:45:17.959574Z",
+     "iopub.status.idle": "2021-10-22T11:45:18.184496Z",
+     "shell.execute_reply": "2021-10-22T11:45:18.184071Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "%load_ext lightmetrica_jupyter"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "aaf58950",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:18.188643Z",
+     "iopub.status.busy": "2021-10-22T11:45:18.187859Z",
+     "iopub.status.idle": "2021-10-22T11:45:18.200726Z",
+     "shell.execute_reply": "2021-10-22T11:45:18.201107Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.000] Lightmetrica -- Version 3.0.0 (rev. 70601db) Linux x64\n"
+     ]
+    }
+   ],
+   "source": [
+    "lm.init()\n",
+    "lm.log.init('jupyter')\n",
+    "lm.progress.init('jupyter')\n",
+    "lm.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "d0e67740",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:18.204882Z",
+     "iopub.status.busy": "2021-10-22T11:45:18.204246Z",
+     "iopub.status.idle": "2021-10-22T11:45:18.217876Z",
+     "shell.execute_reply": "2021-10-22T11:45:18.217472Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.017] Loading plugin [name='objloader_tinyobjloader']\n",
+      "[I|0.017] .. Successfully loaded [name='objloader_tinyobjloader']\n"
+     ]
+    }
+   ],
+   "source": [
+    "lm.comp.load_plugin(os.path.join(env.bin_path, 'objloader_tinyobjloader'))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "8a18e686",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:18.221724Z",
+     "iopub.status.busy": "2021-10-22T11:45:18.221061Z",
+     "iopub.status.idle": "2021-10-22T11:45:18.233574Z",
+     "shell.execute_reply": "2021-10-22T11:45:18.233097Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "objloader_names = ['simple', 'tinyobjloader']\n",
+    "scene_names = lmscene.scenes_small()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "2236b033",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:18.239222Z",
+     "iopub.status.busy": "2021-10-22T11:45:18.238510Z",
+     "iopub.status.idle": "2021-10-22T11:45:21.144149Z",
+     "shell.execute_reply": "2021-10-22T11:45:21.144529Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.053] Loading asset [name='model_obj']\n",
+      "[I|0.053] .. Loading OBJ file [path='fireplace_room.obj']\n",
+      "[I|0.053] .. Loading MTL file [path='fireplace_room.mtl']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.377] .. Loading texture [path='wood.ppm']\n",
+      "[I|0.468] .. Loading texture [path='leaf.ppm']\n",
+      "[I|0.470] .. Loading texture [path='picture8.ppm']\n",
+      "[I|0.502] .. Loading texture [path='wood5.ppm']\n",
+      "[I|0.559] Loading asset [name='model_obj']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|0.861] .. Loading texture [path='wood.ppm']\n",
+      "[I|0.949] .. Loading texture [path='leaf.ppm']\n",
+      "[I|0.951] .. Loading texture [path='picture8.ppm']\n",
+      "[I|0.980] .. Loading texture [path='wood5.ppm']\n",
+      "[I|1.035] Loading asset [name='model_obj']\n",
+      "[I|1.035] .. Loading OBJ file [path='fireplace_room.obj']\n",
+      "[I|1.035] .. Loading MTL file [path='fireplace_room.mtl']\n",
+      "[I|1.355] .. Loading texture [path='wood.ppm']\n",
+      "[I|1.444] .. Loading texture [path='leaf.ppm']\n",
+      "[I|1.447] .. Loading texture [path='picture8.ppm']\n",
+      "[I|1.475] .. Loading texture [path='wood5.ppm']\n",
+      "[I|1.531] Loading asset [name='model_obj']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|1.824] .. Loading texture [path='wood.ppm']\n",
+      "[I|1.911] .. Loading texture [path='leaf.ppm']\n",
+      "[I|1.913] .. Loading texture [path='picture8.ppm']\n",
+      "[I|1.943] .. Loading texture [path='wood5.ppm']\n",
+      "[I|1.995] Loading asset [name='model_obj']\n",
+      "[I|1.996] .. Loading OBJ file [path='fireplace_room.obj']\n",
+      "[I|1.996] .. Loading MTL file [path='fireplace_room.mtl']\n",
+      "[I|2.307] .. Loading texture [path='wood.ppm']\n",
+      "[I|2.388] .. Loading texture [path='leaf.ppm']\n",
+      "[I|2.390] .. Loading texture [path='picture8.ppm']\n",
+      "[I|2.417] .. Loading texture [path='wood5.ppm']\n",
+      "[I|2.473] Loading asset [name='model_obj']\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[I|2.772] .. Loading texture [path='wood.ppm']\n",
+      "[I|2.859] .. Loading texture [path='leaf.ppm']\n",
+      "[I|2.862] .. Loading texture [path='picture8.ppm']\n",
+      "[I|2.891] .. Loading texture [path='wood5.ppm']\n"
+     ]
+    }
+   ],
+   "source": [
+    "loading_time_df = pd.DataFrame(columns=objloader_names, index=scene_names)\n",
+    "for scene_name in scene_names:\n",
+    "    # Check consistency with other loaders\n",
+    "    for objloader_name in objloader_names:\n",
+    "        # Load the scene with selected obj loader\n",
+    "        lm.objloader.init(objloader_name)\n",
+    "        lm.reset()\n",
+    "        \n",
+    "        def load_model():\n",
+    "            lm.load_model('model_obj', 'wavefrontobj', {\n",
+    "                'path': os.path.join(env.scene_path, 'fireplace_room/fireplace_room.obj')\n",
+    "            })\n",
+    "            \n",
+    "        loading_time = timeit.timeit(stmt=load_model, number=1)\n",
+    "        loading_time_df[objloader_name][scene_name] = loading_time"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "97ee6296",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2021-10-22T11:45:21.148883Z",
+     "iopub.status.busy": "2021-10-22T11:45:21.147931Z",
+     "iopub.status.idle": "2021-10-22T11:45:21.168321Z",
+     "shell.execute_reply": "2021-10-22T11:45:21.167919Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>simple</th>\n",
+       "      <th>tinyobjloader</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>fireplace_room</th>\n",
+       "      <td>0.502512</td>\n",
+       "      <td>0.471116</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>cornell_box_sphere</th>\n",
+       "      <td>0.492432</td>\n",
+       "      <td>0.461976</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>cube</th>\n",
+       "      <td>0.473428</td>\n",
+       "      <td>0.468999</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                      simple tinyobjloader\n",
+       "fireplace_room      0.502512      0.471116\n",
+       "cornell_box_sphere  0.492432      0.461976\n",
+       "cube                0.473428      0.468999"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "loading_time_df"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "formats": "ipynb,py:light",
+   "text_representation": {
+    "extension": ".py",
+    "format_name": "light",
+    "format_version": "1.4",
+    "jupytext_version": "1.2.4"
+   }
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

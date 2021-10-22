@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python binding" href="python_binding.html" />
+    <link rel="prev" title="Build System" href="build_system.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Component</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-interface">Creating interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-interface">Implementing interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-plugin">Creating plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-instance">Creating instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameterized-creation">Parameterized creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#component-hierarchy-and-locator">Component hierarchy and locator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#weak-references">Weak references</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-information">Querying information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supporting-serialization">Supporting serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#singleton">Singleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changes-from-version-2">Changes from Version 2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Component</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/component.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="component">
+<span id="id1"></span><h1>Component<a class="headerlink" href="#component" title="Permalink to this headline"></a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>Lightmetrica is build upon a component object system which provides various features to support extensibility as well as usability based on object-oriented paradigm. All extensible features of the framework, e.g., materials or renderers etc., are implemented based on this system. The purpose of our component object system is to provide a complete decoupling between the interface and the implementation. Our component interface is based on the type erasure by virtual classes in C++. Once an instance is created, the type of the implementation is erased and we can access the underlying implementation through the interface type.</p>
+<p>To create an instance in C++, typically, we need to know the type of the derived class. For instance, assume we have an interface <code class="docutils literal notranslate"><span class="pre">A</span></code> (pure virtual class) and an implementation A1 inheriting <code class="docutils literal notranslate"><span class="pre">A</span></code>. Here, to instantiate A1, we need an definition of the <code class="docutils literal notranslate"><span class="pre">A1</span></code>, e.g., by including the header containing the definition of <code class="docutils literal notranslate"><span class="pre">A1</span></code>. A problem is that we pointlessly increase the coupling between <code class="docutils literal notranslate"><span class="pre">A1</span></code> and the creator of the class, although once created they are only used through the interface <code class="docutils literal notranslate"><span class="pre">A</span></code>. This requires to expose the header containing A1 as a separated file, where the header needs to contain private members being never referenced in the installation of the class unless we use the trick like pimpl.</p>
+<p>To resolve this problem, we adopted a common practice to use an abstract factory. Instead of using actual type of the derived class, an instance is created by an (string) identifier. The factory need to know the mapping between the identifier and the way of creating instance of an implementation. Our component object system can automate the registration process by a simple macro. Furthermore, our component system is flexible enough to implement plugins as easily as built-in components.</p>
+</div>
+<div class="section" id="creating-interface">
+<h2>Creating interface<a class="headerlink" href="#creating-interface" title="Permalink to this headline"></a></h2>
+<p>A <em>component interface</em> is simply an C++ virtual class that directly/indirectly inherits <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> class.
+Note that <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> can also be a component interface.
+An example of the component interface with a virtual function would be like:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="implementing-interface">
+<span id="id2"></span><h2>Implementing interface<a class="headerlink" href="#implementing-interface" title="Permalink to this headline"></a></h2>
+<p><em>Implementing</em> a component interface is same as C++ standard in a sense that
+the user needs to inherit an interface type and override the virtual functions.
+The implemented class must be registered to the framework via <a class="reference internal" href="api_ref.html#c.LM_COMP_REG_IMPL" title="LM_COMP_REG_IMPL"><code class="xref c c-func docutils literal notranslate"><span class="pre">LM_COMP_REG_IMPL()</span></code></a> macro.
+For instance, implementing <code class="docutils literal notranslate"><span class="pre">TestComponent</span></code> above looks like</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_Impl</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TestComponent</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">LM_COMP_REG_IMPL</span><span class="p">(</span><span class="n">TestComponent_Impl</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;testcomponent::impl&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="api_ref.html#c.LM_COMP_REG_IMPL" title="LM_COMP_REG_IMPL"><code class="xref c c-func docutils literal notranslate"><span class="pre">LM_COMP_REG_IMPL()</span></code></a> macro takes a class name in the first argument and the identifier of the class in the second argument.
+The identifier is just an string and we can specify any letters in it, yet as a convention, we used <code class="docutils literal notranslate"><span class="pre">interface::impl</span></code> format throughout the framework.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The registration process happens in static initialization phase.
+If an identifier is already registered, the framework reports an runtime error through standard output.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can check registered implementations by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::foreachRegistered()</span></code> function.</p>
+</div>
+</div>
+<div class="section" id="creating-plugin">
+<h2>Creating plugin<a class="headerlink" href="#creating-plugin" title="Permalink to this headline"></a></h2>
+<p>Creating plugins of the framework is straightforward.
+A plugin is just an component implementation placed in the dynamically loadable context.
+This is flexible because the user do not need to care about the change of the syntax to create an plugin.
+An dynamic libraries can contain as many component implementation as you want.
+A plugin can be loaded by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::load_plugin()</span></code> function
+and unloaded by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::unload_plugins()</span></code> function.</p>
+</div>
+<div class="section" id="creating-instance">
+<h2>Creating instance<a class="headerlink" href="#creating-instance" title="Permalink to this headline"></a></h2>
+<p>Once a registration has done, we are ready to use it.
+We can create an instance of a component by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::create()</span></code> function.
+For instance, creating <code class="docutils literal notranslate"><span class="pre">testcomponent::impl</span></code> component reads</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">create</span><span class="o">&lt;</span><span class="n">TestComponent</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;testcomponent::impl&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The first argument is the identifier of the implementation,
+the second argument is the component locator of the instance if the object is integrated into the global component hierarchy.
+For now, let’s keep it empty. You need to specify the type of the component interface with template type.
+If the instance creation fails, the function will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::create()</span></code> function returns <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code> of the specified interface type.
+The lifetime management of the instance is up to the users.
+The unique_ptr is equipped with a custom deleter to support the case where the instance is created in the different dynamic libraries.</p>
+</div>
+<div class="section" id="parameterized-creation">
+<h2>Parameterized creation<a class="headerlink" href="#parameterized-creation" title="Permalink to this headline"></a></h2>
+<p>We can pass arbitrary arguments in a JSON-like format as a third argument of <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::create()</span></code> function.
+We depend <a class="reference external" href="https://github.com/nlohmann/json">nlohmann/json</a> library to achieve this feature. See the link for the supported syntax and types.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">testcomp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">create</span><span class="o">&lt;</span><span class="n">TestComponent</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;testcomponent::impl_with_param&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="s">&quot;param1&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="s">&quot;param2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The parameters are routed to <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function
+implemented in the specified component. We can extract the values from the Json type
+using accessors like STL containers.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_ImplWithParam</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TestComponent</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">prop</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">param1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prop</span><span class="p">[</span><span class="s">&quot;param1&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">param2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prop</span><span class="p">[</span><span class="s">&quot;param2&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">LM_COMP_REG_IMPL</span><span class="p">(</span><span class="n">TestComponent_ImplWithParam</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;testcomponent::impl_with_param&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For convenience, we provided serializers
+to automatically convert types to/from the JSON type,
+which includes e.g. vector / matrix types, raw pointer types.</p>
+</div>
+</div>
+<div class="section" id="component-hierarchy-and-locator">
+<span id="id3"></span><h2>Component hierarchy and locator<a class="headerlink" href="#component-hierarchy-and-locator" title="Permalink to this headline"></a></h2>
+<p>Composition of the unique_ptr of components or raw pointers inside a component implicitly defines
+a <em>component hierarchy</em> of the components.
+In the framework, we adopted a strict ownership constraint
+that one instance of the component can only be possessed and managed by a single another component.
+In other words, we do not allow to use <code class="docutils literal notranslate"><span class="pre">shared_ptr</span></code> to manage the instance of the framework.
+This constraint makes it possible to identify a component inside the hierarchy by a locator.</p>
+<p>A <em>component locator</em> is a string to uniquely identify an component instance inside the hierarchy.
+The string start with the character <code class="docutils literal notranslate"><span class="pre">$</span></code> and arbitrary sequence of characters separated by <code class="docutils literal notranslate"><span class="pre">.</span></code> (dot character).
+For instance, <code class="docutils literal notranslate"><span class="pre">$.assets.obj1.mesh1</span></code>. Each string separated by <code class="docutils literal notranslate"><span class="pre">.</span></code> is used to identify the components
+owned by the current node inside the hierarchy. By iteratively tracing down the hierarchy from the root,
+the locator can identify an single component instance.</p>
+<p>When we create an instance, we can also specify the component locator in the second argument.
+An helper function <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::makeLoc()</span></code> is useful to make locator appending to the current locator.
+For instance, the following creation of an instance called inside <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function of a component with locator <code class="docutils literal notranslate"><span class="pre">$.test</span></code>
+will create a component with locator <code class="docutils literal notranslate"><span class="pre">$.test.test2</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_Container</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;</span><span class="w"> </span><span class="n">comp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">prop</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Called inside a component with locator = $.test,</span>
+<span class="w">        </span><span class="c1">// create an instance with locator = $.test.comp</span>
+<span class="w">        </span><span class="n">comp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">create</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;testcomponent::nested&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">makeLoc</span><span class="p">(</span><span class="s">&quot;comp&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="nf">underlying</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// Underlying component must be accessible with the same name specified in create function</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">comp</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">comp</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Also, the underlying component must be accessible by the specified name using <a class="reference internal" href="api_ref.html#_CPPv4NK2lm9Component10underlyingERKNSt6stringE" title="lm::Component::underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::underlying()</span></code></a> function.
+<a class="reference internal" href="api_ref.html#_CPPv4NK2lm9Component4nameEv" title="lm::Component::name"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::name()</span></code></a> function is useful to extract the name of the component.
+Once the above setup completes, we can access the underlying component globally by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::get()</span></code> function.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;$.test.comp&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some advanced features like serialization are based on this mechanism.
+Even if it seems to be working without ill-formed components, e.g.,
+those not specifying locator or not implementing <a class="reference internal" href="api_ref.html#_CPPv4NK2lm9Component10underlyingERKNSt6stringE" title="lm::Component::underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::underlying()</span></code></a> function,
+it will definitely break some feature in the end.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A root component is internally configured and the user do not care about it.
+But for instance for testing purpose, we can configure it using <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::detail::registerRootComp()</span></code> function.</p>
+</div>
+</div>
+<div class="section" id="weak-references">
+<h2>Weak references<a class="headerlink" href="#weak-references" title="Permalink to this headline"></a></h2>
+<p>A raw pointer composed inside a component is handled as a weak reference to the other (owned) components.
+Our framework only allows weak reference as a back edge (the edge making cycles) in the component hierarchy.
+Weak references are often used by being injected to the other components
+using <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function.</p>
+<p>For instance, the following component accepts <code class="docutils literal notranslate"><span class="pre">ref</span></code> parameter as a string
+representing the locator of the component.
+We can then inject the weak reference using <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::get()</span></code> function.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_WeakRef1</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">prop</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="n">prop</span><span class="p">[</span><span class="s">&quot;ref&quot;</span><span class="p">]);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Alternatively, one can inject the raw pointer directly to the component.
+because the pointer types are automatically serialized to JSON type.
+This strategy is especially useful when we want to inject the pointer of the type
+inaccessible from the component hierarchy.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">create</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;testcomponent::weakref2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="s">&quot;ref&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_WeakRef2</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">construct</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">prop</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prop</span><span class="p">[</span><span class="s">&quot;ref&quot;</span><span class="p">];</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-information">
+<span id="id4"></span><h2>Querying information<a class="headerlink" href="#querying-information" title="Permalink to this headline"></a></h2>
+<p>A component provides a way to query underlying components.
+The framework utilizes this feature to implement some advanced features.
+To support querying of the underlying components, a component must implement both <a class="reference internal" href="api_ref.html#_CPPv4NK2lm9Component10underlyingERKNSt6stringE" title="lm::Component::underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::underlying()</span></code></a> and <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component18foreach_underlyingERK16ComponentVisitor" title="lm::Component::foreach_underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::foreach_underlying()</span></code></a> functions.</p>
+<p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm9Component10underlyingERKNSt6stringE" title="lm::Component::underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::underlying()</span></code></a> function return the component with a query by name.
+<a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component18foreach_underlyingERK16ComponentVisitor" title="lm::Component::foreach_underlying"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::foreach_underlying()</span></code></a> function on the other hands enumerates all the underlying components.
+<code class="docutils literal notranslate"><span class="pre">visit</span></code> function needs to distinguish both unique_ptr (owned pointer) and raw pointer (weak reference) in the second argument. Yet <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::comp::visit()</span></code> function will call them automatically according to the types for you.
+For instance, the component containing <code class="docutils literal notranslate"><span class="pre">unique_ptr</span></code> is like</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_Container1</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">comps</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">compMap</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="nf">underlying</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">comp</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">compMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">name</span><span class="p">)).</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foreach_underlying</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ComponentVisitor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">visit</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="nl">comp</span> <span class="p">:</span><span class="w"> </span><span class="n">comps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">visit</span><span class="p">(</span><span class="n">visit</span><span class="p">,</span><span class="w"> </span><span class="n">comp</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Similary, for the component containing weak references is like</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_Container2</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="nf">underlying</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;ref1&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ref1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;ref2&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ref2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">foreach_underlying</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ComponentVisitor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">visit</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">visit</span><span class="p">(</span><span class="n">visit</span><span class="p">,</span><span class="w"> </span><span class="n">ref1</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">lm</span><span class="o">::</span><span class="n">comp</span><span class="o">::</span><span class="n">visit</span><span class="p">(</span><span class="n">visit</span><span class="p">,</span><span class="w"> </span><span class="n">ref2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="supporting-serialization">
+<h2>Supporting serialization<a class="headerlink" href="#supporting-serialization" title="Permalink to this headline"></a></h2>
+<p>Our serialization feature depends on <a class="reference external" href="https://github.com/USCiLab/cereal">cereal</a> library.
+Yet unfortunately, a polymorphism support of cereal library is restricted because
+the declaration of the derived class must be exposed to the global.
+In our component object system, an implementation is completely separated from the interface
+and there is no way to find corresponding implementation automatically.</p>
+<p>We workaround this issue by using providing two virtual functions: <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component4saveER13OutputArchive" title="lm::Component::save"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::save()</span></code></a> and <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component4loadER12InputArchive" title="lm::Component::load"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::load()</span></code></a> to implement serialization for a specific archive,
+and route the object finding mechanism of cereal to use these functions.
+This means we can no longer use arbitrary archive type.
+The default archive type is defined as <code class="docutils literal notranslate"><span class="pre">lm::InputArchive</span></code> and <code class="docutils literal notranslate"><span class="pre">lm::OutputArchive</span></code>.</p>
+<p>Implementing almost-similar two virtual functions are cumbersome.
+To mitigate this, we provided <code class="xref c c-func docutils literal notranslate"><span class="pre">LM_SERIALIZE_IMPL()</span></code> helper macro.
+The following code serializes member variables including component instances, or weak references.
+Note that we can even serialize raw pointers, as long as they are weak references pointing to
+a component inside the component tree, and accessible by component locator.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">TestComponent_Serial</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Ptr</span><span class="o">&lt;</span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">comp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">lm</span><span class="o">::</span><span class="n">Component</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">LM_SERIALIZE_IMPL</span><span class="p">(</span><span class="n">ar</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">ar</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">comp</span><span class="p">,</span><span class="w"> </span><span class="n">ref</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="singleton">
+<h2>Singleton<a class="headerlink" href="#singleton" title="Permalink to this headline"></a></h2>
+<p>A component can be used as a singleton,
+and our framework implemented globally-accessible yet extensible features using component as singleton.
+For convenience, we provide <a class="reference internal" href="api_ref.html#_CPPv4I0EN2lm4comp6detail15ContextInstanceE" title="lm::comp::detail::ContextInstance"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::comp::detail::ContextInstance</span></code></a> class to
+make any component interface a singleton.</p>
+</div>
+<div class="section" id="changes-from-version-2">
+<h2>Changes from Version 2<a class="headerlink" href="#changes-from-version-2" title="Permalink to this headline"></a></h2>
+<p>In Version 3, we refactored the already-implemented features in the component object system in Version 2. Furthermore, some features are newly implemented but some other features are deprecated due to a design choice.</p>
+<p>Particularly in Version 3, we deprecated portable interface support. This feature allows the user to extend the interface irrespective to ABI of the compilers and standard libraries. To achieve this, we needed to reimplement our own virtual function mechanism where a function call is automatically converted to a function call with portable c-interfaces in compile time.</p>
+<p>Although the feature worked great as expected, we decided to deprecate the feature with the following reasons. First, to describe the component interface and implementation, a developer needed to write boilerplate codes using C++ macros, which has lessened the maintainability of the codes. Second, this feature could be an cause of massive performance loss because the reimplemented virtual function mechanism could prevent the optimization by compilers (e.g., devirtualization). Last but not least, this feature was rarely used in the actual research projects because in most cases the developer wants to build the framework from the source and doesn’t care about the binary portability issues. In Version 3, the interface simpl uses standard virtual function mechanism in C++.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="build_system.html" class="btn btn-neutral float-left" title="Build System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_binding.html" class="btn btn-neutral float-right" title="Python binding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

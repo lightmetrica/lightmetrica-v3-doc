@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Path sampling &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"jax": ["input/TeX", "output/HTML-CSS"], "HTML-CSS": {"availableFonts": ["TeX"], "scale": 90}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tests in Lightmetrica" href="test.html" />
+    <link rel="prev" title="Python binding" href="python_binding.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Path sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notations">Notations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scene-interaction-point">Scene interaction point</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scene-interaction-type">Scene interaction type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixing-interaction-type">Fixing interaction type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#point-geometry">Point geometry</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#point-geometry-type">Point geometry type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#degenerated-point">Degenerated point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#infinitely-distant-point">Infinitely distant point</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#component-index">Component index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ray-scene-intersection-query">Ray-scene intersection query</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ray-casting">Ray casting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checking-visibility">Checking visibility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#local-ray-direction-sampling">Local ray/direction sampling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aggregated-solid-angle-measure-for-direction-sampling">Aggregated solid angle measure for direction sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregated-throughput-measure-for-primary-ray-sampling">Aggregated throughput measure for primary ray sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#component-sampling">Component sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#primary-ray-sampling">Primary ray sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#endpoint-sampling">Endpoint sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direction-sampling">Direction sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-endpoint-sampling">Direct endpoint sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-directional-components">Evaluating directional components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transforming-probability-densities">Transforming probability densities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#solid-angle-to-projected-solid-angle">Solid angle to projected solid angle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregated-solid-angle-to-area">Aggregated solid angle to area</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conversion-of-aggregated-throughput">Conversion of aggregated throughput</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bidirectional-path-sampling">Bidirectional path sampling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Notations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#light-transport-path">Light transport path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sampling-subpath">Sampling subpath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sampling-subpath-from-endpoint">Sampling subpath from endpoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-subpaths">Connecting subpaths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-measurement-contribution">Evaluating measurement contribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-bidirectional-path-pdf">Evaluating bidirectional path PDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-sampling-weight">Evaluating sampling weight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-mis-weight">Evaluating MIS weight</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-of-notations">Summary of notations</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Path sampling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/path_sampling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="path-sampling">
+<span id="id1"></span><h1>Path sampling<a class="headerlink" href="#path-sampling" title="Permalink to this headline"></a></h1>
+<p>In this section we will discuss about path sampling API of Lightmetrica.
+Implementing a rendering technique means you want to implement path sampling technique
+and evaluating the contribution and probability that the path is being sampled.
+Lightmetrica provides an API for path sampling and evaluation which supports typical use-cases to implement various rendering techniques.
+The purpose of this section is to give a correspondence between the formulation of light transport and the implementation in Lightmetrica.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The math notations in this page is based on a seminal PhD thesis by Veach [1998], although there are slight differences.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section would be better understood in conjunction with an actual implementation of a renderer.
+You can find various built-in renderer implementations in <code class="docutils literal notranslate"><span class="pre">src/renderer</span></code> directory.</p>
+</div>
+<div class="section" id="notations">
+<h2>Notations<a class="headerlink" href="#notations" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Symbol</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type (depending on context)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p>Position in a scene</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SceneInteraction</span></code>, <code class="docutils literal notranslate"><span class="pre">PointGeometry</span></code>, <code class="docutils literal notranslate"><span class="pre">Vec3</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\omega\)</span></p></td>
+<td><p>Direction</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Vec3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega_{\mathbf{x} \to \mathbf{y}}\)</span></p></td>
+<td><p>Direction from <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> to <span class="math notranslate nohighlight">\(\mathbf{y}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Vec3</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(dA\)</span></p></td>
+<td><p>Area measure</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(d\sigma\)</span></p></td>
+<td><p>Solid angle measure</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(d\sigma^\bot\)</span></p></td>
+<td><p>Projected solid angle measure</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathcal{M}\)</span></p></td>
+<td><p>Set of points on scene surfaces</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathcal{V}\)</span></p></td>
+<td><p>Set of points in volume</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathcal{S}^2\)</span></p></td>
+<td><p>Unit sphere</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="scene-interaction-point">
+<span id="path-sampling-scene-interaction-point"></span><h2>Scene interaction point<a class="headerlink" href="#scene-interaction-point" title="Permalink to this headline"></a></h2>
+<p><a class="reference internal" href="api_ref.html#_CPPv4N2lm16SceneInteractionE" title="lm::SceneInteraction"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::SceneInteraction</span></code></a> structure represents a scene interaction associated to a point <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> in the scene. In the code we often name a variable of this type as <code class="docutils literal notranslate"><span class="pre">sp</span></code> (<strong>s</strong>cene interaction <strong>p</strong>oint).
+The structure contains a type of the interaction <code class="docutils literal notranslate"><span class="pre">sp.type</span></code>, the geometry information about the point <code class="docutils literal notranslate"><span class="pre">sp.geom</span></code>, and the index of the scene node <code class="docutils literal notranslate"><span class="pre">sp.primitive</span></code>.</p>
+<p>The primitive index is mainly used internally to query the information of the scene from <a class="reference internal" href="api_ref.html#_CPPv4N2lm5SceneE" title="lm::Scene"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Scene</span></code></a> class. Many of the sampling and evaluation functions under <code class="docutils literal notranslate"><span class="pre">lm::path</span></code> namespace use this index.</p>
+<div class="section" id="scene-interaction-type">
+<span id="path-sampling-scene-interaction-type"></span><h3>Scene interaction type<a class="headerlink" href="#scene-interaction-type" title="Permalink to this headline"></a></h3>
+<p>A type of the interaction <code class="docutils literal notranslate"><span class="pre">sp.type</span></code> is either of the following:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notation</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_E \subseteq \mathcal{M}\)</span></p></td>
+<td><p>Scene interaction is <em>camera endpoint</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(CameraEndpoint)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_L \subseteq \mathcal{M}\)</span></p></td>
+<td><p>Scene interaction is <em>light endpoint</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(LightEndpoint)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_S \subseteq \mathcal{M}\)</span></p></td>
+<td><p>Scene interaction is <em>surface interaction</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(SurfaceInteraction)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{V}\)</span></p></td>
+<td><p>Scene interaction is <em>medium interaction</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(MediumInteraction)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Also, some aggregate types are defined mainly for convenience:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notation</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_L \cup \mathcal{M}_E\)</span></p></td>
+<td><p>Scene interaction is <em>endpoint</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(Endpoint)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_S \cup \mathcal{V}\)</span></p></td>
+<td><p>Scene interaction is <em>midpoint</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(Midpoint)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fixing-interaction-type">
+<h3>Fixing interaction type<a class="headerlink" href="#fixing-interaction-type" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::as_type()</span></code> function casts the scene interaction as a different type.
+For instance, this function is useful when you want to enforce the scene interaction as an endpoint type.</p>
+</div>
+</div>
+<div class="section" id="point-geometry">
+<span id="path-sampling-point-geometry"></span><h2>Point geometry<a class="headerlink" href="#point-geometry" title="Permalink to this headline"></a></h2>
+<p><a class="reference internal" href="api_ref.html#_CPPv4N2lm13PointGeometryE" title="lm::PointGeometry"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::PointGeometry</span></code></a> structure represents the geometry information associated to a point in a scene <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>.
+In the code we often name a variable of this type as <code class="docutils literal notranslate"><span class="pre">geom</span></code>.
+The following table shows the correspondence between the math notations and members of the structure.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notation</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{n}_s(\mathbf{x})\)</span></p></td>
+<td><p>Shading normal at <span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.n</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{n}_g(\mathbf{x})\)</span></p></td>
+<td><p>Geometric normal at <span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.gn</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((\mathbf{u},\mathbf{v})\)</span></p></td>
+<td><p>Orthonormal tangent vectors at <span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.u</span></code>, <code class="docutils literal notranslate"><span class="pre">geom.v</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(M_{\mathrm{world}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(M_{\mathrm{world}} := [\mathbf{u}\; \mathbf{v}\; \mathbf{n}_s(\mathbf{x})]\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.to_world</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(M_{\mathrm{local}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(M_{\mathrm{local}} := M_{\mathrm{world}}^T\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.to_local</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the context, the notations might be omitted. For instance, <span class="math notranslate nohighlight">\(\mathbf{n}\equiv\mathbf{x}_s(\mathbf{x})\)</span> if by context the use of the shading normal for a point <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is apparent.</p>
+</div>
+<div class="section" id="point-geometry-type">
+<h3>Point geometry type<a class="headerlink" href="#point-geometry-type" title="Permalink to this headline"></a></h3>
+<p>A point geometry has special flags representing specific configuration of the point.</p>
+<div class="section" id="degenerated-point">
+<span id="path-sampling-degenerated-point"></span><h4>Degenerated point<a class="headerlink" href="#degenerated-point" title="Permalink to this headline"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">geom.degenerated</span></code> representing the geometry around a point <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <em>degenerated</em>, namely, the surface around the point is collapsed to a point or a line. In this case, the normal and tangent vectors are undefined. Notation: <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{deg}}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Points in a volume is always degenerated: <span class="math notranslate nohighlight">\(\mathcal{V}\subseteq\mathcal{S}_{\mathrm{deg}}\)</span>.</p>
+</div>
+</div>
+<div class="section" id="infinitely-distant-point">
+<span id="path-sampling-infinitely-distant-point"></span><h4>Infinitely distant point<a class="headerlink" href="#infinitely-distant-point" title="Permalink to this headline"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">geom.infinite</span></code> representing a virtual point far distant from a surface in certain direction <span class="math notranslate nohighlight">\(\omega\)</span>. The point does not represent an actual point associated with a certain position in the scene. Also in this case, the normal and tangent vectors are undefined. Specifically in this case, <code class="docutils literal notranslate"><span class="pre">geom.wo</span></code> represents the direction toward the distant point. Notation: <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{inf}}\)</span>. Since the point is characterized by a direction <span class="math notranslate nohighlight">\(\omega\)</span> we sometime denote the point as <span class="math notranslate nohighlight">\(\mathbf{x}(\omega)\in\mathcal{S}_{\mathrm{inf}}\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="component-index">
+<h2>Component index<a class="headerlink" href="#component-index" title="Permalink to this headline"></a></h2>
+<p>A scene interaction can be associated with a <em>component</em> information,
+which is used to differentiate the behavior of the sampling and evaluation related to the interaction.
+A component is denoted by a <em>component index</em>, an integer value that specify the index of the component of the interaction.
+For instance, this feature can be used to implement sampling and evaluation of multiple component materials.
+Furthermore, the handling of perfect specular materials can be implemented using this feature.
+In the code, we denote the component index as <code class="docutils literal notranslate"><span class="pre">comp</span></code>.
+Later we will discuss about the detail of the usage in the API.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The component index is not included in the information accessible as <a class="reference internal" href="api_ref.html#_CPPv4N2lm16SceneInteractionE" title="lm::SceneInteraction"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::SceneInteraction</span></code></a> structure, since we want to handle the scene information without components being selected, e.g., the intersected surface point via ray casting.</p>
+</div>
+</div>
+<div class="section" id="ray-scene-intersection-query">
+<h2>Ray-scene intersection query<a class="headerlink" href="#ray-scene-intersection-query" title="Permalink to this headline"></a></h2>
+<p>Ray-scene intersection query is a basic building block of the rendering technique.
+Our API supports two types of the ray-scene intersection queries: <em>ray casting</em> and <em>visibility check</em>.</p>
+<div class="section" id="ray-casting">
+<h3>Ray casting<a class="headerlink" href="#ray-casting" title="Permalink to this headline"></a></h3>
+<p>The query is implemented in <a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Scene9intersectE3Ray5Float5Float" title="lm::Scene::intersect"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::intersect()</span></code></a> function.
+<em>Ray casting</em> is an operation to find the closest next surface point <span class="math notranslate nohighlight">\(\mathbf{x}_\mathcal{M}(\mathcal{x},\omega) \in \mathcal{M}_S\)</span> along with a direction <span class="math notranslate nohighlight">\(\omega\)</span> from a point <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> within the range of the distance <span class="math notranslate nohighlight">\([t_{\mathrm{min}},t_{\mathrm{max}}]\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{x}_\mathcal{M}(\mathbf{x},\omega, t_{\mathrm{min}},t_{\mathrm{max}})
+  &amp;= \mathbf{x} + d_\mathcal{M}(\mathbf{x},\omega,t_{\mathrm{min}},t_{\mathrm{max}}) \, \omega, \\
+d_\mathcal{M}(\mathbf{x},\omega,t_{\mathrm{min}},t_{\mathrm{max}})
+  &amp;= \inf{\left\{ d \in [t_{\mathrm{min}},t_{\mathrm{max}}] \mid \mathbf{x} + d\omega \in \mathcal{M}_S \right\} }.\end{split}\]</div>
+<p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Scene9intersectE3Ray5Float5Float" title="lm::Scene::intersect"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::intersect()</span></code></a> function returns <a class="reference internal" href="api_ref.html#_CPPv4N2lm16SceneInteractionE" title="lm::SceneInteraction"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::SceneInteraction</span></code></a> of <code class="docutils literal notranslate"><span class="pre">SurfaceInteraction</span></code> type. The underlying <code class="docutils literal notranslate"><span class="pre">geom</span></code> contains the information about the intersected point.
+Note that <span class="math notranslate nohighlight">\(\mathbf{x}_\mathcal{M}(\mathbf{x},\omega, t_{\mathrm{min}},\infty) \in \mathcal{S}_{\mathrm{inf}}\)</span> if <span class="math notranslate nohighlight">\(d_\mathcal{M}(\mathbf{x},\omega,t_{\mathrm{min}},\infty) = \infty\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default values for the arguments <code class="docutils literal notranslate"><span class="pre">tmin</span></code> and <code class="docutils literal notranslate"><span class="pre">tmax</span></code> are <code class="xref cpp cpp-var docutils literal notranslate"><span class="pre">lm::Eps</span></code> and <a class="reference internal" href="api_ref.html#_CPPv43Inf" title="Inf"><code class="xref cpp cpp-var docutils literal notranslate"><span class="pre">Inf</span></code></a> respectively. <code class="docutils literal notranslate"><span class="pre">tmin</span></code> is set to <a class="reference internal" href="api_ref.html#_CPPv43Eps" title="Eps"><code class="xref cpp cpp-var docutils literal notranslate"><span class="pre">Eps</span></code></a> to add tolerance to avoid self-intersection.</p>
+</div>
+</div>
+<div class="section" id="checking-visibility">
+<h3>Checking visibility<a class="headerlink" href="#checking-visibility" title="Permalink to this headline"></a></h3>
+<p>The query is implemented in <a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Scene7visibleERK16SceneInteractionRK16SceneInteraction" title="lm::Scene::visible"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::visible()</span></code></a> function.
+The function evaluates the <em>visibility function</em> defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}V(\mathbf{x}, \mathbf{y}) =
+\begin{cases}
+  1   &amp;   \mathbf{x} \text{ and } \mathbf{y} \text{ are mutually visible,} \\
+  0   &amp;   \text{otherwise}.
+\end{cases}\end{split}\]</div>
+<p>More precisely, we use the extended version of the function incorporating the properties of point geometry information. The extended visiblity function is defined for <span class="math notranslate nohighlight">\((\mathbf{x}, \mathbf{y})\)</span> where <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> are not both in <span class="math notranslate nohighlight">\(\mathcal{S}_{\mathrm{inf}}\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}V(\mathbf{x}, \mathbf{y}) &amp;=
+\begin{cases}
+  V_1(\mathbf{x}, \mathbf{y})   &amp;   \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \lor \mathbf{y}\in\mathcal{S}_{\mathrm{inf}} \\
+  V_2(\mathbf{x}, \mathbf{y})   &amp;   \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{y}\notin\mathcal{S}_{\mathrm{inf}},
+\end{cases} \\
+V_1(\mathbf{x}, \mathbf{y}) &amp;=
+\begin{cases}
+  1   &amp;     \mathbf{y}\in\mathcal{S}_{\mathrm{inf}} \land d_\mathcal{M}(\mathbf{x},\omega_{\mathbf{x}\to\mathbf{y}}, 0, \infty) = \infty \text{ or} \\
+      &amp;     \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \land d_\mathcal{M}(\mathbf{y},\omega_{\mathbf{y}\to\mathbf{x}}, 0, \infty) = \infty, \\
+  0   &amp;     \text{otherwise},
+\end{cases} \\
+V_2(\mathbf{x}, \mathbf{y}) &amp;=
+\begin{cases}
+  1   &amp;   d_\mathcal{M}(\mathbf{x},\omega, 0, \| \mathbf{x}-\mathbf{y} \| ) = \| \mathbf{x}-\mathbf{y} \|, \\
+  0   &amp;   \text{otherwise}.
+\end{cases}\end{split}\]</div>
+</div>
+</div>
+<div class="section" id="local-ray-direction-sampling">
+<h2>Local ray/direction sampling<a class="headerlink" href="#local-ray-direction-sampling" title="Permalink to this headline"></a></h2>
+<p>A path construction comprises a combination of local sampling based on the point in a scene, which is important especially when you want to handle the path generation and evaluation implicitly, e.g., when you want to implement path tracing.</p>
+<div class="section" id="aggregated-solid-angle-measure-for-direction-sampling">
+<h3>Aggregated solid angle measure for direction sampling<a class="headerlink" href="#aggregated-solid-angle-measure-for-direction-sampling" title="Permalink to this headline"></a></h3>
+<p>The framework defines various direction sampling techniques, many of which take samples from conditional distribution given a point <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. The density function of the conditional distribution is either defined over solid angle measure or projected solid angle measure according to the type of the point geometry.</p>
+<p>To generalize the two cases and simplify the interface, we define <em>aggregated solid angle measure</em> <span class="math notranslate nohighlight">\(d\sigma^*\)</span> which alternates the measure by the degeneracy of the point geometry:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}d\sigma^*(\omega\mid\mathbf{x}) =
+\begin{cases}
+  d\sigma(\omega\mid\mathbf{x})       &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{deg}}, \\
+  d\sigma^\bot(\omega\mid\mathbf{x})  &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}},
+\end{cases}\end{split}\]</div>
+<p>Using this measure, we can define the aggregated PDF:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_{\sigma^*}(\omega\mid\mathbf{x}) =
+\begin{cases}
+  p_{\sigma}(\omega\mid\mathbf{x})         &amp;   \mathbf{x}\in\mathcal{S}_{\mathrm{deg}}, \\
+  p_{\sigma^\bot}(\omega\mid\mathbf{x})    &amp;   \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}}.
+\end{cases}\end{split}\]</div>
+</div>
+<div class="section" id="aggregated-throughput-measure-for-primary-ray-sampling">
+<h3>Aggregated throughput measure for primary ray sampling<a class="headerlink" href="#aggregated-throughput-measure-for-primary-ray-sampling" title="Permalink to this headline"></a></h3>
+<p>The primary ray is sampled from the joint distribution.
+Similarly to the previous case, we want to define the generalized measure to support various use-cases of the primary ray sampling. We categorize the measure by two types according to the type of the endpoint being sampled from the joint distribution.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}d\mu^*(\mathbf{x},\omega) &amp;=
+\begin{cases}
+  d\sigma(\omega) dA^\bot(\mathbf{x}\mid\omega)   &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \\
+  dA(\mathbf{x}) d\sigma^*(\omega\mid\mathbf{x})    &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}}
+\end{cases} \\
+&amp;=
+\begin{cases}
+  d\sigma(\omega) dA^\bot(\mathbf{x}\mid\omega)     &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \\
+  dA(\mathbf{x}) d\sigma(\omega\mid\mathbf{x})      &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{x}\in\mathcal{S}_{\mathrm{deg}} \\
+  dA(\mathbf{x}) d\sigma^\bot(\omega\mid\mathbf{x}) &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}},
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu^*\)</span> is a <em>throughput measure</em> [Veach 1998, Chapter 4.1] defined for the space of rays <span class="math notranslate nohighlight">\(\mathcal{M}\times\mathcal{S}^2\)</span>. The second line expands the definition of the aggregated solid angle measure, which enable to support the cases where the ray originated from the degenerated point (e.g., pinhole camera).</p>
+<p>Note that in the case of <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{inf}}\)</span>, the position sampling happens on the virtual plane perpendicular to the ray direction, which is reflected by the projected area measure <span class="math notranslate nohighlight">\(dA^\bot\)</span>.</p>
+<p>Similarly, the joint PDF can be defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_{\mu^*}(\mathbf{x},\omega) &amp;=
+\begin{cases}
+  p_{\sigma}(\omega) p_{A^\bot}(\mathbf{x}\mid\omega)     &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \\
+  p_A(\mathbf{x}) p_\sigma(\omega\mid\mathbf{x})      &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{x}\in\mathcal{S}_{\mathrm{deg}} \\
+  p_A(\mathbf{x}) p_{\sigma^\bot}(\omega\mid\mathbf{x}) &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}}.
+\end{cases}\end{split}\]</div>
+</div>
+<div class="section" id="component-sampling">
+<span id="path-sampling-component-sampling"></span><h3>Component sampling<a class="headerlink" href="#component-sampling" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Sampling: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_component()</span></code></p></li>
+<li><p>PDF: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::pdf_component()</span></code></p></li>
+</ul>
+<p>The function samples a component index <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}j \sim
+p_c(\cdot) =
+\begin{cases}
+  p_{c,L}(\cdot\mid\mathbf{x})     &amp; \text{if } \mathbf{x} \in \mathcal{M}_L \\
+  p_{c,E}(\cdot\mid\mathbf{x})     &amp; \text{if } \mathbf{x} \in \mathcal{M}_E \\
+  p_{c,\mathrm{bsdf}}(\cdot\mid\mathbf{x})     &amp; \text{if } \mathbf{x} \in \mathcal{M}_S \\
+  p_{c,\mathrm{phase}}(\cdot\mid\mathbf{x})     &amp; \text{if } \mathbf{x} \in \mathcal{V}.
+\end{cases}\end{split}\]</div>
+<p>Currently component sampling is only supported for the surface interactions.
+In other cases the component index is fixed to 0 (with probability 1).
+The following table shows where the operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(j \sim p_{c,\mathrm{bsdf}}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material16sample_componentERK16ComponentSampleURK13PointGeometry4Vec3" title="lm::Material::sample_component"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::sample_component()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{c,\mathrm{bsdf}}(j\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material13pdf_componentEiRK13PointGeometry4Vec3" title="lm::Material::pdf_component"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::pdf_component()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="primary-ray-sampling">
+<span id="path-sampling-primary-ray-sampling"></span><h3>Primary ray sampling<a class="headerlink" href="#primary-ray-sampling" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Sampling: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_primary_ray()</span></code></p></li>
+<li><p>PDF: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::pdf_primary_ray()</span></code></p></li>
+</ul>
+<p>The function samples a primary ray <span class="math notranslate nohighlight">\((\mathbf{x}, \omega)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(\mathbf{x}, \omega) \sim
+\begin{cases}
+  p_{\mu^* L}(\cdot,\cdot)   &amp; \text{if transport direction is } L\to E \\
+  p_{\mu^* E}(\cdot,\cdot)   &amp; \text{if transport direction is } E\to L.
+\end{cases}\end{split}\]</div>
+<p>If <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\omega\)</span> are independent,
+the function is equivalent to evaluating <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_position()</span></code> and <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_direction()</span></code> separately.</p>
+<p>The following table shows where each operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((\mathbf{x}, \omega) \sim p_{\mu^* L}(\cdot,\cdot)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light10sample_rayERK10RaySampleURK9Transform" title="lm::Light::sample_ray"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::sample_ray()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\mu^* L}(\mathbf{x}, \omega)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light7pdf_rayERK13PointGeometry4Vec3RK9Transformb" title="lm::Light::pdf_ray"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::pdf_ray()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((\mathbf{x}, \omega) \sim p_{\mu^* E}(\cdot,\cdot)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera10sample_rayERK10RaySampleU" title="lm::Camera::sample_ray"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::sample_ray()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\mu^* E}(\mathbf{x}, \omega)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera7pdf_rayERK13PointGeometry4Vec3" title="lm::Camera::pdf_ray"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::pdf_ray()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="endpoint-sampling">
+<span id="path-sampling-endpoint-sampling"></span><h3>Endpoint sampling<a class="headerlink" href="#endpoint-sampling" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Sampling: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_position()</span></code></p></li>
+<li><p>PDF: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::pdf_position()</span></code></p></li>
+</ul>
+<p>The function samples an endpoint <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{x} \sim
+\begin{cases}
+  p_{AL}(\cdot)   &amp; \text{if transport direction is } L\to E \\
+  p_{AE}(\cdot)   &amp; \text{if transport direction is } E\to L.
+\end{cases}\end{split}\]</div>
+<p>The following table shows where each operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \sim p_{AL}(\cdot)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light15sample_positionERK15PositionSampleURK9Transform" title="lm::Light::sample_position"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::sample_position()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{AL}(\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light12pdf_positionERK13PointGeometryRK9Transform" title="lm::Light::pdf_position"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::pdf_position()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \sim p_{AE}(\cdot)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera15sample_positionERK15PositionSampleU" title="lm::Camera::sample_position"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::sample_position()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{AE}(\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera12pdf_positionERK13PointGeometry" title="lm::Camera::pdf_position"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::pdf_position()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="direction-sampling">
+<span id="path-sapmling-direction-sampling"></span><h3>Direction sampling<a class="headerlink" href="#direction-sampling" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Sampling: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_direction()</span></code></p></li>
+<li><p>PDF: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::pdf_direction()</span></code></p></li>
+</ul>
+<p>The function samples a direction <span class="math notranslate nohighlight">\(\omega\)</span> originated from a current position <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> with the component index <span class="math notranslate nohighlight">\(j\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\omega \sim
+p_{\sigma^* \to}(\cdot\mid\mathbf{x},j) =
+\begin{cases}
+  p_{\sigma^* L}(\cdot\mid\mathbf{x})    &amp;   \text{if } \mathbf{x} \in \mathcal{M}_L \\
+  p_{\sigma^* E}(\cdot\mid\mathbf{x})    &amp;   \text{if } \mathbf{x} \in \mathcal{M}_E \\
+  p_{\sigma^* \mathrm{bsdf}}(\cdot\mid\mathbf{x},j)  &amp;   \text{if } \mathbf{x} \in \mathcal{M}_S \\
+  p_{\sigma^* \mathrm{phase}}(\cdot\mid\mathbf{x}) &amp;   \text{if } \mathbf{x} \in \mathcal{V}.
+\end{cases}\end{split}\]</div>
+<p>The following table shows where each operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* L}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light16sample_directionERK16DirectionSampleURK13PointGeometry" title="lm::Light::sample_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::sample_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* L}(\omega\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light13pdf_directionERK13PointGeometry4Vec3" title="lm::Light::pdf_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::pdf_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* E}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera16sample_directionERK16DirectionSampleURK13PointGeometry" title="lm::Camera::sample_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::sample_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* E}(\omega\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera13pdf_directionERK13PointGeometry4Vec3" title="lm::Camera::pdf_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::pdf_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* \mathrm{bsdf}}(\cdot\mid\mathbf{x},j)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material16sample_directionERK16DirectionSampleURK13PointGeometry4Vec3i8TransDir" title="lm::Material::sample_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::sample_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* \mathrm{bsdf}}(\omega\mid\mathbf{x},j)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material13pdf_directionERK13PointGeometry4Vec34Vec3ib" title="lm::Material::pdf_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::pdf_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* \mathrm{phase}}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Phase16sample_directionERK16DirectionSampleURK13PointGeometry4Vec3" title="lm::Phase::sample_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Phase::sample_direction()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* \mathrm{phase}}(\omega\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Phase13pdf_directionERK13PointGeometry4Vec34Vec3" title="lm::Phase::pdf_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Phase::pdf_direction()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="direct-endpoint-sampling">
+<span id="path-sampling-direct-endpoint-sampling"></span><h3>Direct endpoint sampling<a class="headerlink" href="#direct-endpoint-sampling" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Sampling: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_direct()</span></code></p></li>
+<li><p>PDF: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::pdf_direct()</span></code></p></li>
+</ul>
+<p>The function samples a direction <span class="math notranslate nohighlight">\(\omega\)</span> directly toward an endpoint based on the current position <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. This sampling strategy is mainly used to implement next event estimation.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\omega \sim
+\begin{cases}
+  p_{\sigma^* \mathrm{directL}}(\cdot\mid\mathbf{x})    &amp; \text{if transport direction is } E\to L \\
+  p_{\sigma^* \mathrm{directE}}(\cdot\mid\mathbf{x})    &amp; \text{if transport direction is } L\to E.
+\end{cases}\end{split}\]</div>
+<p>The following table shows where each operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* \mathrm{directL}}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light13sample_directERK10RaySampleURK13PointGeometryRK9Transform" title="lm::Light::sample_direct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::sample_direct()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">LE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* \mathrm{directL}}(\omega\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light10pdf_directERK13PointGeometryRK13PointGeometryRK9Transform4Vec3b" title="lm::Light::pdf_direct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::pdf_direct()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">LE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\omega \sim p_{\sigma^* \mathrm{directE}}(\cdot\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera13sample_directERK10RaySampleURK13PointGeometry" title="lm::Camera::sample_direct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::sample_direct()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">EL</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(p_{\sigma^* \mathrm{directE}}(\omega\mid\mathbf{x})\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera10pdf_directERK13PointGeometryRK13PointGeometry4Vec3" title="lm::Camera::pdf_direct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::pdf_direct()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">EL</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="evaluating-directional-components">
+<span id="path-evaluating-directional-components"></span><h3>Evaluating directional components<a class="headerlink" href="#evaluating-directional-components" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Function: <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::eval_contrb_direction()</span></code></p></li>
+</ul>
+<p>The function evaluates directional component of path integral <span class="math notranslate nohighlight">\(f_{s\Sigma}(\mathbf{x},j, \omega_i,\omega_o)\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_{s\Sigma}(\mathbf{x},j,\omega_i,\omega_o) =
+\begin{cases}
+  L_e(\mathbf{x}, \omega_o)         &amp; \mathbf{x}\in\mathcal{M}_L \\
+  W_e(\mathbf{x}, \omega_o)         &amp; \mathbf{x}\in\mathcal{M}_E \\
+  f_{\mathrm{bsdf}\Sigma}(\mathbf{x},j,\omega_i,\omega_o) &amp; \mathbf{x}\in\mathcal{M}_S \\
+  \mu_s(\mathbf{x}) f_{\mathrm{phase}}(\mathbf{x},\omega_i,\omega_o) &amp; \mathbf{x}\in\mathcal{V},
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Sigma\in\{ L,E \}\)</span>. <span class="math notranslate nohighlight">\(\Sigma\)</span> corresponds to the transport direction, which is necessary to handle non-symmetric scattering described in Chapter 5 of Veach’s thesis.
+The following table shows where each operation is implemented.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Implemented in</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(L_e(\mathbf{x},\omega_o)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Light4evalERK13PointGeometry4Vec3b" title="lm::Light::eval"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Light::eval()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(W_e(\mathbf{x},\omega_o)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm6Camera4evalE4Vec3" title="lm::Camera::eval"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Camera::eval()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(f_{\mathrm{bsdf}L}(\mathbf{x},j,\omega_i,\omega_o)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material4evalERK13PointGeometry4Vec34Vec3i8TransDirb" title="lm::Material::eval"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::eval()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">LE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{\mathrm{bsdf}E}(\mathbf{x},j,\omega_i,\omega_o)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Material4evalERK13PointGeometry4Vec34Vec3i8TransDirb" title="lm::Material::eval"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Material::eval()</span></code></a> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">EL</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mu_s(\mathbf{x})\)</span></p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{\mathrm{phase}}(\mathbf{x},\omega_i,\omega_o)\)</span></p></td>
+<td><p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm5Phase4evalERK13PointGeometry4Vec34Vec3" title="lm::Phase::eval"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Phase::eval()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="math notranslate nohighlight">\(\omega_i\)</span> is not used when <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is endpoint.
+Also, <span class="math notranslate nohighlight">\(\omega_o\)</span> always represents outgoing direction irrespective to the transport directions,
+that is, the same direction as the transport direction.</p>
+</div>
+</div>
+</div>
+<div class="section" id="transforming-probability-densities">
+<h2>Transforming probability densities<a class="headerlink" href="#transforming-probability-densities" title="Permalink to this headline"></a></h2>
+<p>The framework provides the functions to transform density functions according to a different measure.</p>
+<div class="section" id="solid-angle-to-projected-solid-angle">
+<h3>Solid angle to projected solid angle<a class="headerlink" href="#solid-angle-to-projected-solid-angle" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::surface::convert_pdf_SA_to_projSA()</span></code> implements the conversion:</p>
+<div class="math notranslate nohighlight">
+\[p_{\sigma^\bot}(\omega\mid\mathbf{x})
+  = \left| \frac{d\sigma}{d\sigma^\bot} \right| p_{\sigma}(\omega\mid\mathbf{x})
+  = \frac{p_{\sigma}(\omega)}{\| \mathbf{n}(\mathbf{x}) \cdot \omega \|}.\]</div>
+</div>
+<div class="section" id="aggregated-solid-angle-to-area">
+<span id="path-sampling-aggregated-solid-angle-to-area"></span><h3>Aggregated solid angle to area<a class="headerlink" href="#aggregated-solid-angle-to-area" title="Permalink to this headline"></a></h3>
+<p id="path-sampling-extended-geometry-term">To achieve the transformation of densities from aggregated solid angle to area measure according to the point geometry types transparently, we define the <em>extended geometry term</em> as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G(\mathbf{x}, \mathbf{y}) &amp;=
+  \frac{D(\mathbf{x}, \mathbf{y}) V(\mathbf{x}, \mathbf{y}) D(\mathbf{y}, \mathbf{x})}
+       {d^2(\mathbf{x}, \mathbf{y})}, \\
+D(\mathbf{x}, \mathbf{y}) &amp;=
+  \begin{cases}
+    \left| \mathbf{n}(\mathbf{x}) \cdot \omega_{\mathbf{x} \to \mathbf{y}} \right|
+      &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}} \\
+    1 &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{deg}},
+  \end{cases} \\
+d^2(\mathbf{x}, \mathbf{y}) &amp;=
+  \begin{cases}
+    \| \mathbf{x} - \mathbf{y} \|^2
+      &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}} \land \mathbf{y}\notin\mathcal{S}_{\mathrm{inf}} \\
+    1 &amp; \text{otherwise}.
+  \end{cases}\end{split}\]</div>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::surface::geometry_term()</span></code> function evaluates the term, but assuming that <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> are mutually visible (thus <span class="math notranslate nohighlight">\(V(\mathbf{x}, \mathbf{y})=1\)</span>).
+<code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::surface::convert_pdf_projSA_to_area()</span></code> function internally uses this function to implement the conversion of the densities, which allows to convert the densities according to the point geometry type:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_A(\mathbf{y}\mid\mathbf{x})
+  = \underbrace{\left| \frac{d\sigma^*}{dA} \right|}_{G(\mathbf{x}, \mathbf{y})}
+    p_{\sigma^*}(\omega\mid\mathbf{x})
+  =
+  \begin{cases}
+    \left| \frac{d\sigma}{dA} \right|      p_{\sigma}(\omega\mid\mathbf{x})
+      &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{deg}}, \\
+    \left| \frac{d\sigma^\bot}{dA} \right| p_{\sigma^\bot}(\omega\mid\mathbf{x})
+      &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{deg}},
+  \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\omega = \omega_{\mathbf{x}\to\mathbf{y}}\)</span>.
+This is especially useful when the conversion function is used in conjunction with the PDF evaluated with <code class="docutils literal notranslate"><span class="pre">lm::path::pdf_*()</span></code> function, which evaluates the density with aggregated solid angle measure.</p>
+</div>
+<div class="section" id="conversion-of-aggregated-throughput">
+<span id="path-sampling-aggregated-throughput"></span><h3>Conversion of aggregated throughput<a class="headerlink" href="#conversion-of-aggregated-throughput" title="Permalink to this headline"></a></h3>
+<p>The joint PDF for the primary ray sampling is also bound to be used for the measure conversion.
+We can also use the extended geometry term for the conversion:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_{\mu^*}(\mathbf{x},\omega) G(\mathbf{x}, \mathbf{y}) =
+p_{A^{2*}}(\mathbf{x},\mathbf{y}) :=
+\begin{cases}
+  p_{\sigma}(\omega_{\mathbf{x}\to\mathbf{y}}) p_A(\mathbf{y}\mid\omega_{\mathbf{x}\to\mathbf{y}})    &amp; \mathbf{x}\in\mathcal{S}_{\mathrm{inf}} \\
+  p_A(\mathbf{x}) p_A(\mathbf{y}\mid\mathbf{x})   &amp; \mathbf{x}\notin\mathcal{S}_{\mathrm{inf}}.
+\end{cases}\end{split}\]</div>
+<p>Note that in the case of <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{inf}}\)</span>, the conversion happens for the projected area measure, since the differential area around <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> are orthogonally projected to the surface around <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[p_{A}(\mathbf{x})
+  = \underbrace{ \left| \mathbf{n}(\mathbf{x}) \cdot \omega_{\mathbf{x} \to \mathbf{y}} \right| }_{G(\mathbf{x},\mathbf{y})} p_{A^\bot}(\mathbf{y}).\]</div>
+<p>We also note that in this case the converted measure is <em>not</em> a product area measure <span class="math notranslate nohighlight">\(dA^2\)</span> but <span class="math notranslate nohighlight">\(d\sigma dA\)</span>. We denote the converted aggregate measure as <span class="math notranslate nohighlight">\(dA^{2*}\)</span>.</p>
+</div>
+</div>
+<div class="section" id="bidirectional-path-sampling">
+<h2>Bidirectional path sampling<a class="headerlink" href="#bidirectional-path-sampling" title="Permalink to this headline"></a></h2>
+<p>Some rendering techniques such as bidirectional path tracing are based on <em>bidirectional path sampling</em>, which explicitly manages a structure of a light transport path in the process of sampling and evaluation.
+In this section, we will introduce the related API for bidirectional path sampling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently bidirectional path sampling of the framework only supports light transport on surfaces,
+although we have a plan to support volumetric light transport.</p>
+</div>
+<div class="section" id="id2">
+<h3>Notations<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Symbol</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type (depending on context)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span></p></td>
+<td><p>Path vertex</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Vert</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\bar{x}\)</span></p></td>
+<td><p>Light transport path (or just path)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Path</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\bar{x}_L\)</span> or <span class="math notranslate nohighlight">\(\bar{y}\)</span></p></td>
+<td><p>Light subpath</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Path</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\bar{x}_E\)</span> or <span class="math notranslate nohighlight">\(\bar{z}\)</span></p></td>
+<td><p>Eye subpath</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Path</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\((s,t)\)</span></p></td>
+<td><p>Strategy index of bidirectional path sampling</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(int,</span> <span class="pre">int)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(s\)</span></p></td>
+<td><p>Number of vertices in light subpath</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td><p>Number of vertices in eye subpath</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="light-transport-path">
+<span id="path-sampling-light-transport-path"></span><h3>Light transport path<a class="headerlink" href="#light-transport-path" title="Permalink to this headline"></a></h3>
+<p>A <em>path</em> <span class="math notranslate nohighlight">\(\bar{x}\)</span> is defined by a sequence of path vertices.
+We denote the path with the number of vertices <span class="math notranslate nohighlight">\(k\)</span> as <span class="math notranslate nohighlight">\(\bar{x}_k:=\mathbf{x}_0\mathbf{x}_2\dots\mathbf{x}_{k-1}\)</span>.
+We often omit the subscript <span class="math notranslate nohighlight">\(k\)</span> depending on the context.</p>
+<ul class="simple">
+<li><p>A path is <em>full path</em> if the path constitutes of a complete light transport path, where <span class="math notranslate nohighlight">\(\mathbf{x}_0\in\mathcal{M}_L\)</span>, <span class="math notranslate nohighlight">\(\mathbf{x}_{k-1}\in\mathcal{M}_E\)</span>. In the context without ambiguity, we call a <em>full path</em> as merely a <em>path</em>.</p></li>
+<li><p>A path is <em>subpath</em> if the path starts but not ends its vertices on the endpoints. Note that the subpath always starts from an endpoint, irrespective to the type of the endpoint. If <span class="math notranslate nohighlight">\(\mathbf{x}_0\in\mathcal{M}_L\)</span>, the subpath is called <em>light subpath</em>. If <span class="math notranslate nohighlight">\(\mathbf{x}_0\in\mathcal{M}_E\)</span>, the subpath is called <em>eye subpath</em>.</p></li>
+</ul>
+<p>In the framework, <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Path</span></code> structure represents a path, which holds a vector <code class="docutils literal notranslate"><span class="pre">.vs</span></code>  of <code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Vert</span></code> representing a path vertex.
+A path vertex structure is a tuple of a surface interaction <code class="docutils literal notranslate"><span class="pre">.sp</span></code> and an integer <code class="docutils literal notranslate"><span class="pre">.comp</span></code> representing the component index associated to the scene interaction.
+We denote the component index associated to the vertex <span class="math notranslate nohighlight">\(\mathbf{x}_i\)</span> as <span class="math notranslate nohighlight">\(j_i\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The order of the vector <code class="docutils literal notranslate"><span class="pre">.vs</span></code> depends on the type of the path. If a path represents a full path, the vector always starts from a vertex representing light endpoint and ends with camera endpoint. On the other hand, if a path represents a subpath, the vector starts from an endpoint irrespective to the type of endpoint.</p>
+</div>
+<p>The correspondence between notations and the operations over the path structure is summarized in the following table.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notation</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(k\)</span></p></td>
+<td><p>Number of path vertices</p></td>
+<td><p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::num_verts()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(k+1\)</span></p></td>
+<td><p>Path length</p></td>
+<td><p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::num_edges()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}_i\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(i\)</span>-th path vertex from <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span></p></td>
+<td><p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::vertex_at()</span></code> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">LE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}_{k-1-i}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(i\)</span>-th path vertex from <span class="math notranslate nohighlight">\(\mathbf{x}_{k-1}\)</span></p></td>
+<td><p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::vertex_at()</span></code> with <code class="docutils literal notranslate"><span class="pre">trans_dir</span> <span class="pre">=</span> <span class="pre">EL</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}_i\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(i\)</span>-th path vertex from <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span></p></td>
+<td><p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::subpath_vertex_at()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::vertex_at()</span></code> or <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::subpath_vertex_at()</span></code> returns
+a pointer to a path vertex and <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if the index is out of bound,
+which is intentional to simplify the implementation.</p>
+</div>
+</div>
+<div class="section" id="sampling-subpath">
+<span id="path-sampling-sampling-subpath"></span><h3>Sampling subpath<a class="headerlink" href="#sampling-subpath" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_subpath()</span></code> function samples a subpath up to the given maximum number of vertices <code class="docutils literal notranslate"><span class="pre">max_verts</span></code>. The type of subpath can be configured by the argument <code class="docutils literal notranslate"><span class="pre">trans_dir</span></code>. In math notations, this process can be written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\bar{x} = \mathbf{x}_{0}\mathbf{x}_{1}\dots\mathbf{x}_{l-1} \sim
+\begin{cases}
+  p_E(\cdot)  &amp; \text{if transport direction is } E\to L \\
+  p_L(\cdot)  &amp; \text{if transport direction is } L\to E,
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(l\)</span> is the maximum number of vertices.
+In fact, each vertex is sampled sequentially</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(\mathbf{x}_0, \mathbf{x}_1) &amp;\sim p_{A^{2*}\Sigma}(\cdot,\cdot), \\
+j_0 &amp;\sim p_{c}(\cdot\mid\mathbf{x}_0), \\
+j_1 &amp;\sim p_{c}(\cdot\mid\mathbf{x}_1), \\
+\mathbf{x}_i &amp;\sim p_{A\to}(\cdot\mid\mathbf{x}_{i-1},j_{i-1}), \\
+j_i &amp;\sim p_{c}(\cdot\mid\mathbf{x}_i)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i=2,\dots,(l-1)\)</span> and <span class="math notranslate nohighlight">\(\Sigma\in\{ L,E \}\)</span>. Thus the PDF for subpath sampling can be written as</p>
+<div class="math notranslate nohighlight">
+\[p_\Sigma(\bar{x}) =
+  p_{A^{2*}\Sigma}(\mathbf{x}_0,\mathbf{x}_1)
+  p_{c}(j_0\mid\mathbf{x}_0)
+  p_{c}(j_1\mid\mathbf{x}_1)
+  \prod_{i=2}^{l-1}
+    p_{A\to}(\mathbf{x}_{i}\mid\mathbf{x}_{i-1})
+    p_{c}(j_i\mid\mathbf{x}_i).\]</div>
+<p>The above equation abstracts the actual sampling process which iteratively samples directions and applies ray casting to find the next intersected points:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{alignat}{3}
+  (\mathbf{x}_0, \omega_0) &amp;\sim p_{\mu^* \Sigma}(\cdot,\cdot),\\
+  \mathbf{x}_1 &amp;= \mathbf{x}_\mathcal{M}(\mathbf{x}_0, \omega_0), \\
+  \omega_i &amp;\sim p_{\sigma^* \to}(\cdot\mid\mathbf{x}_{i-1},j_{i-1}), \\
+  \mathbf{x}_i &amp;= \mathbf{x}_\mathcal{M}(\mathbf{x}_{i-1}, \omega_i).
+\end{alignat}\end{split}\]</div>
+<p>Note that the first two vertices are always sampled from the joint distribution.
+If <span class="math notranslate nohighlight">\(\mathbf{x}_0\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}_1\)</span> are independent, the sampling process is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{x}_0 &amp;\sim p_{A\Sigma}(\cdot), \\
+\mathbf{x}_i &amp;\sim p_{A\to}(\cdot\mid\mathbf{x}_{i-1},j_{i-1}),\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i=1,\dots,(l-1)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of vertiecs sampled with <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_subpath()</span></code> function might not always same as <code class="docutils literal notranslate"><span class="pre">max_verts</span></code> due to the early termination of the subpath. The early termination happens for instance when the ray doesn’t hit with any objects before sampling <code class="docutils literal notranslate"><span class="pre">max_verts</span></code> vertices.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For simplicity, we don’t use Russian roulette in <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_subpath()</span></code> function.
+You need to define your own subpath sampling function to support that.</p>
+</div>
+</div>
+<div class="section" id="sampling-subpath-from-endpoint">
+<h3>Sampling subpath from endpoint<a class="headerlink" href="#sampling-subpath-from-endpoint" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api_ref.html#_CPPv428sample_subpath_from_endpointR3RngR4PathPK5Scenei8TransDir" title="sample_subpath_from_endpoint"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">sample_subpath_from_endpoint()</span></code></a> function can continue to sample the path vertices from the last vertex of the existing subpath. If the given path is empty, this function is equivalent to <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::sample_subpath()</span></code>.</p>
+</div>
+<div class="section" id="connecting-subpaths">
+<span id="path-sampling-connecting-subpaths"></span><h3>Connecting subpaths<a class="headerlink" href="#connecting-subpaths" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::connect_subpaths()</span></code> function can combine light subpath <span class="math notranslate nohighlight">\(\bar{y}\)</span> and eye subpath <span class="math notranslate nohighlight">\(\bar{z}\)</span> with a given number of vertices <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> in each subpath respectively. This process amounts to sampling a full path with the strategy <span class="math notranslate nohighlight">\((s,t)\)</span>. If the subpaths are not <em>connectable</em>, the connection process will be failed and the function returns <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code>.
+For the strategy index <span class="math notranslate nohighlight">\((s,t)\)</span> where <span class="math notranslate nohighlight">\(s+t\geq 1\)</span>, the subpaths are connectable according to the following conditions:</p>
+<ul class="simple">
+<li><p>if <span class="math notranslate nohighlight">\(s=0\)</span>, <span class="math notranslate nohighlight">\(\mathbf{z}_{t-1}\notin\mathcal{S}_{\mathrm{deg}}\)</span>,</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(t=0\)</span>, <span class="math notranslate nohighlight">\(\mathbf{y}_{s-1}\notin\mathcal{S}_{\mathrm{deg}}\)</span>,</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(s=1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{y}_0\in\mathcal{S}_{\mathrm{conn}}\)</span>  and <span class="math notranslate nohighlight">\(\mathbf{z}_{t-1}\notin\mathcal{S}_{\mathrm{spec}}\)</span> and <span class="math notranslate nohighlight">\(V(\mathbf{y}_{0}, \mathbf{z}_{t-1}) = 0\)</span>,</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(t=1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{z}_0\in\mathcal{S}_{\mathrm{conn}}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{y}_{s-1}\notin\mathcal{S}_{\mathrm{spec}}\)</span> and <span class="math notranslate nohighlight">\(V(\mathbf{y}_{s-1}, \mathbf{z}_{0}) = 0\)</span>,</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(s&gt;0\)</span> and <span class="math notranslate nohighlight">\(t&gt;0\)</span>, <span class="math notranslate nohighlight">\(\mathbf{y}_{s-1}\notin\mathcal{S}_{\mathrm{spec}}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{z}_{t-1}\notin\mathcal{S}_{\mathrm{spec}}\)</span> and <span class="math notranslate nohighlight">\(V(\mathbf{y}_{s-1}, \mathbf{z}_{t-1}) = 0\)</span>.</p></li>
+</ul>
+<p>The vertex <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <em>specular</em> if the directional component includes a delta function.
+We use the notation <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{spec}}\)</span> to denote the property of the vertex.
+For instance, perfect specular reflection is specular.
+A specular vertex needs special treatment since its support cannot be sampled without deterministic selection.
+This condition can be checked using <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::is_specular_component()</span></code> function.</p>
+<p>The endpoint <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <em>connectable</em> if corresponding positional and directional PDFs can be evaluated independently. We use the notation <span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{conn}}\)</span>. For instance, the endpoint is connectable if the first two subpath vertices are independent. This condition can be checked using <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::connectable_endpoint()</span></code> function.</p>
+<p>Given an strategy <span class="math notranslate nohighlight">\(s\)</span>, we call the subpaths satisfying the above condition being <em>connectable subpaths by the strategy</em> <span class="math notranslate nohighlight">\(s\)</span> and the connected full path being <em>samplable by the strategy</em> <span class="math notranslate nohighlight">\(s\)</span>.
+This condition can be checked by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::is_samplable_bidir()</span></code> function,
+assuming the visibility function in the definition is assumed to be one.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An endpoint can be connectable even if <span class="math notranslate nohighlight">\(\bar{x}_{\Sigma,0}\)</span> and <span class="math notranslate nohighlight">\(\bar{x}_{\Sigma,1}\)</span> are not independent as long as we can compute the marginals of the joint distribution analytically.</p>
+</div>
+</div>
+<div class="section" id="evaluating-measurement-contribution">
+<span id="path-sampling-measurement-contribution"></span><h3>Evaluating measurement contribution<a class="headerlink" href="#evaluating-measurement-contribution" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::eval_measurement_contrb_bidir()</span></code> function evaluates the <em>measurement contribution function</em> defined by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_{s,t}(\bar{x}) &amp;= f_L(\bar{y}) c_{s,t}(\bar{y}, \bar{z}) f_E(\bar{z}),  \\
+f_L(\bar{y}) &amp;=
+  \begin{cases}
+    1   &amp; s = 0 \\
+    \prod_{i=0}^{s-2} f_{sL}(\mathbf{y}_{i-1},\mathbf{y}_{i},\mathbf{y}_{i+1})
+                        G(\mathbf{y}_{i},\mathbf{y}_{i+1})
+      &amp; \text{otherwise},
+  \end{cases} \\
+f_L(\bar{z}) &amp;=
+  \begin{cases}
+    1   &amp; t = 0 \\
+    \prod_{i=0}^{t-2} f_{sE}(\mathbf{z}_{i-1},\mathbf{z}_{i},\mathbf{z}_{i+1})
+                        G(\mathbf{z}_{i},\mathbf{z}_{i+1})
+      &amp; \text{otherwise},
+  \end{cases} \\
+c_{s,t}(\bar{y}, \bar{z}) &amp;=
+  \begin{cases}
+    f_{sL}(\mathbf{y}_0,\mathbf{y}_1)   &amp; s = 0 \\
+    f_{sE}(\mathbf{z}_0,\mathbf{z}_1)   &amp; t = 0 \\
+    f_{sL}(\mathbf{y}_{s-2},\mathbf{y}_{s-1},\mathbf{y}_{t-1})
+    G(\mathbf{x}_{t-1}, \mathbf{x}_{s-1})
+    f_{sE}(\mathbf{z}_{t-2},\mathbf{z}_{t-1},\mathbf{z}_{s-1})
+      &amp; \text{otherwise}.
+  \end{cases}\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(c_{s,t}(\bar{y}, \bar{z})\)</span> is called the <em>connection term</em>, which can be evaluated by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::eval_connection_term()</span></code> function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The original measurement contribution function does not take strategy index
+since the scattering term <span class="math notranslate nohighlight">\(f_s\)</span> is assumed to be symmetrical.
+This difference comes from the handling of asymmetric scattering in <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::path::eval_contrb_direction()</span></code> function.</p>
+</div>
+</div>
+<div class="section" id="evaluating-bidirectional-path-pdf">
+<span id="path-sampling-bidirectional-path-pdf"></span><h3>Evaluating bidirectional path PDF<a class="headerlink" href="#evaluating-bidirectional-path-pdf" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::pdf_bidir()</span></code> function evaluates the <em>bidirectional path PDF</em> defined by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_{s,t}(\bar{x}) &amp;=
+  \begin{cases}
+    p_L(\bar{y}) p_E(\bar{z})
+      &amp; \bar{x} \text{ is samplable by the strategy } (s,t) \\
+    0
+      &amp; \text{otherwise},
+  \end{cases} \\
+p_L(\bar{y}) &amp;=
+  \begin{cases}
+    1
+        &amp; s = 0 \\
+    p_{AL}(\mathbf{y}_0)
+        &amp; s = 1 \\
+    p_{A^{2*}L}(\mathbf{y}_0, \mathbf{y}_1)
+      \prod_{i=2}^{s-1} p_{A\to}(\mathbf{y}_i\mid\mathbf{y}_{i-1})
+        &amp; s &gt; 1,
+  \end{cases}\\
+p_E(\bar{z}) &amp;=
+  \begin{cases}
+    1
+        &amp; t = 0 \\
+    p_{AE}(\mathbf{z}_0)
+        &amp; t = 1 \\
+    p_{A^{2*}E}(\mathbf{z}_0, \mathbf{z}_1)
+      \prod_{i=2}^{t-1} p_{A\to}(\mathbf{z}_i\mid\mathbf{z}_{i-1})
+        &amp; t &gt; 1.
+  \end{cases}\end{split}\]</div>
+</div>
+<div class="section" id="evaluating-sampling-weight">
+<span id="path-sampling-evaluating-sampling-weight"></span><h3>Evaluating sampling weight<a class="headerlink" href="#evaluating-sampling-weight" title="Permalink to this headline"></a></h3>
+<p>For convenience, the path structure provides a function <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::eval_sampling_weight_bidir()</span></code> to compute sampling weight <span class="math notranslate nohighlight">\(f_{s,t}(\bar{x})/p_{s,t}(\bar{x})\)</span>.  We assume the input of the function is samplable by the strategy <span class="math notranslate nohighlight">\((s,t)\)</span>. Specifically, the sampling weight is defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}C^*_{s,t}(\bar{x}) &amp;= \alpha_L(\bar{y}) c_{s,t}(\bar{y}, \bar{z}) \alpha_E(\bar{z}), \\
+\alpha_L(\bar{y}) &amp;=
+  \begin{cases}
+    1
+      &amp; s = 0 \\
+    \frac{1}{p_{AL}(\mathbf{y}_0)}
+      &amp; s = 1 \\
+    \frac{f_{sL}(\mathbf{y}_0,\mathbf{y}_1)}{p_{A^{2*}L}(\mathbf{y}_0, \mathbf{y}_1)}
+      \prod_{i=2}^{s-1}
+        \frac{f_{sL}(\mathbf{y}_{i-1},\mathbf{y}_{i},\mathbf{y}_{i+1})}{p_{\sigma^*\to}(\mathbf{y}_i\mid\mathbf{y}_{i-1})}
+      &amp; s &gt; 1,
+  \end{cases} \\
+\alpha_E(\bar{z}) &amp;=
+  \begin{cases}
+    1
+      &amp; t = 0 \\
+    \frac{1}{p_{AL}(\mathbf{z}_0)}
+      &amp; t = 1 \\
+    \frac{f_{sL}(\mathbf{z}_0,\mathbf{z}_1)}{p_{A^{2*}L}(\mathbf{z}_0, \mathbf{z}_1)}
+      \prod_{i=2}^{t-1}
+        \frac{f_{sL}(\mathbf{z}_{i-1},\mathbf{z}_{i},\mathbf{z}_{i+1})}{p_{\sigma^*\to}(\mathbf{z}_i\mid\mathbf{z}_{i-1})}
+      &amp; t &gt; 1,
+  \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_L(\bar{y})\)</span> or <span class="math notranslate nohighlight">\(\alpha_E(\bar{z})\)</span> is called <em>subpath sampling weight</em>, which can be computed by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::eval_subpath_sampling_weight()</span></code> function.</p>
+</div>
+<div class="section" id="evaluating-mis-weight">
+<span id="path-sampling-mis-weight"></span><h3>Evaluating MIS weight<a class="headerlink" href="#evaluating-mis-weight" title="Permalink to this headline"></a></h3>
+<p><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Path::eval_mis_weight()</span></code> function evaluates MIS weight via power heuristic.</p>
+</div>
+</div>
+<div class="section" id="summary-of-notations">
+<h2>Summary of notations<a class="headerlink" href="#summary-of-notations" title="Permalink to this headline"></a></h2>
+<p>The path sampling interface defines various properties associated to the point to the scene <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. The following table summarizes the notations introduced in this section.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notation</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_E\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-scene-interaction-type"><span class="std std-ref">camera endpoint</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(CameraEndpoint)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_L\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-scene-interaction-type"><span class="std std-ref">light endpoint</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(LightEndpoint)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{M}_S\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-scene-interaction-type"><span class="std std-ref">surface interaction</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(SurfaceInteraction)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x} \in \mathcal{V}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-scene-interaction-type"><span class="std std-ref">medium interaction</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sp.is_type(MediumInteraction)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{deg}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-degenerated-point"><span class="std std-ref">degenerated</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.degenerated</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{inf}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <a class="reference internal" href="#path-sampling-infinitely-distant-point"><span class="std std-ref">infinitely distant point</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">geom.infinite</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{spec}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <span class="xref std std-ref">specular</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lm::path::is_specular_component(sp,comp)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbf{x}\in\mathcal{S}_{\mathrm{conn}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is <span class="xref std std-ref">connectable endpoint</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lm::path::connectable_endpoint(sp)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="python_binding.html" class="btn btn-neutral float-left" title="Python binding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="test.html" class="btn btn-neutral float-right" title="Tests in Lightmetrica" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

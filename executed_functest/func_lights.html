@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lights &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"jax": ["input/TeX", "output/HTML-CSS"], "HTML-CSS": {"availableFonts": ["TeX"], "scale": 90}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Renderers" href="func_renderers.html" />
+    <link rel="prev" title="Materials" href="func_materials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../functest.html">Functional tests</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="func_render_all.html">Rendering all scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_accel_consistency.html">Checking consistency of acceleration structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_error_handling.html">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_obj_loader_consistency.html">Checking consistency of OBJ loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_render_instancing.html">Rendering with instanced geometries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_serial_consistency.html">Checking consistency of serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_update_asset.html">Updating already-loaded material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_scheduler.html">Scheduler for rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="func_materials.html">Materials</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Lights</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Scene-setup">Scene setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Rendering">Rendering</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Area-light">Area light</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Environment-light">Environment light</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Point-light">Point light</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Directional-light">Directional light</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="func_renderers.html">Renderers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../functest.html">Functional tests</a> &raquo;</li>
+      <li>Lights</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/executed_functest/func_lights.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Lights">
+<h1>Lights<a class="headerlink" href="#Lights" title="Permalink to this headline"></a></h1>
+<p>This test showcases various light sources supported by Lightmetrica. We render images using <code class="docutils literal notranslate"><span class="pre">renderer::pt</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">lmenv</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">lmenv</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;.lmenv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">lightmetrica</span> <span class="k">as</span> <span class="nn">lm</span>
+<span class="o">%</span><span class="k">load_ext</span> lightmetrica_jupyter
+<span class="kn">import</span> <span class="nn">lmscene</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">lm</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;jupyter&#39;</span><span class="p">)</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;jupyter&#39;</span><span class="p">)</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">comp</span><span class="o">.</span><span class="n">load_plugin</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">bin_path</span><span class="p">,</span> <span class="s1">&#39;accel_embree&#39;</span><span class="p">))</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">lm</span><span class="o">.</span><span class="n">Release</span><span class="p">:</span>
+    <span class="n">lm</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;openmp&#39;</span><span class="p">,</span> <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lm</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">attach_to_debugger</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|0.000] Lightmetrica -- Version 3.0.0 (rev. 70601db) Linux x64
+[I|0.000] Loading plugin [name=&#39;accel_embree&#39;]
+[I|0.001] .. Successfully loaded [name=&#39;accel_embree&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mi">854</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">480</span>
+    <span class="n">film</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_film</span><span class="p">(</span><span class="s1">&#39;film&#39;</span><span class="p">,</span> <span class="s1">&#39;bitmap&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_renderer</span><span class="p">(</span><span class="s1">&#39;renderer&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+        <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">,</span>
+        <span class="n">output</span><span class="o">=</span><span class="n">film</span><span class="p">,</span>
+        <span class="n">max_verts</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">scheduler</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span>
+        <span class="n">render_time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">film</span><span class="o">.</span><span class="n">buffer</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">display_image</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">fig_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">fig_size</span><span class="p">,</span><span class="n">fig_size</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">img</span><span class="o">*</span><span class="n">scale</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.2</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Scene-setup">
+<h2>Scene setup<a class="headerlink" href="#Scene-setup" title="Permalink to this headline"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accel</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_accel</span><span class="p">(</span><span class="s1">&#39;accel&#39;</span><span class="p">,</span> <span class="s1">&#39;embree&#39;</span><span class="p">)</span>
+<span class="n">scene</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_scene</span><span class="p">(</span><span class="s1">&#39;scene&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">accel</span><span class="o">=</span><span class="n">accel</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_material</span><span class="p">(</span><span class="s1">&#39;mat_ut&#39;</span><span class="p">,</span> <span class="s1">&#39;glossy&#39;</span><span class="p">,</span> <span class="n">Ks</span><span class="o">=</span><span class="p">[</span><span class="mf">.8</span><span class="p">,</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.2</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ay</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|0.033] Loading asset [name=&#39;accel&#39;]
+[I|0.034] .. {&#34;intcost&#34;:1.0,&#34;maxBranchingFactor&#34;:2,&#34;maxDepth&#34;:18,&#34;maxLeafSize&#34;:32,&#34;minLeafSize&#34;:1,&#34;quality&#34;:1,&#34;sahBlockSize&#34;:1,&#34;travcost&#34;:1.0}
+[I|0.034] .. {&#34;compact&#34;:false,&#34;dynamic&#34;:false,&#34;filter&#34;:false,&#34;robust&#34;:false}
+[I|0.034] Loading asset [name=&#39;scene&#39;]
+[I|0.034] Loading asset [name=&#39;mat_ut&#39;]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Rendering">
+<h2>Rendering<a class="headerlink" href="#Rendering" title="Permalink to this headline"></a></h2>
+<div class="section" id="Area-light">
+<h3>Area light<a class="headerlink" href="#Area-light" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">light::area</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scene</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">lmscene</span><span class="o">.</span><span class="n">bunny_with_area_light</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">scene_path</span><span class="p">,</span> <span class="n">mat_knob</span><span class="o">=</span><span class="n">mat</span><span class="o">.</span><span class="n">loc</span><span class="p">())</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+<span class="n">display_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|0.050] Loading asset [name=&#39;camera_main&#39;]
+[I|0.050] Loading asset [name=&#39;model_obj&#39;]
+[I|0.050] .. Loading OBJ file [path=&#39;bunny_with_planes.obj&#39;]
+[I|0.193] Loading asset [name=&#39;mat_diffuse_white&#39;]
+[I|0.193] Loading asset [name=&#39;tex_floor&#39;]
+[I|0.193] .. Loading texture [path=&#39;default.png&#39;]
+[I|0.194] Loading asset [name=&#39;mat_floor&#39;]
+[I|0.194] Loading asset [name=&#39;mat_black&#39;]
+[I|0.194] Loading asset [name=&#39;light&#39;]
+[I|0.198] Building acceleration structure [name=&#39;accel&#39;]
+[I|0.198] .. Flattening scene
+[I|0.205] .. Building
+[I|0.256] Loading asset [name=&#39;film&#39;]
+[I|0.272] Loading asset [name=&#39;renderer&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "74316b35764f4cadb25536d3bb2714da", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/executed_functest_func_lights_10_2.png" src="../_images/executed_functest_func_lights_10_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Environment-light">
+<h3>Environment light<a class="headerlink" href="#Environment-light" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">light::env</span></code> <code class="docutils literal notranslate"><span class="pre">light::envconst</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scene</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">lmscene</span><span class="o">.</span><span class="n">bunny_with_env_light</span><span class="p">(</span>
+    <span class="n">scene</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">scene_path</span><span class="p">,</span>
+    <span class="n">mat_knob</span><span class="o">=</span><span class="n">mat</span><span class="o">.</span><span class="n">loc</span><span class="p">(),</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">scene_path</span><span class="p">,</span> <span class="s1">&#39;flower_road_1k.hdr&#39;</span><span class="p">),</span>
+    <span class="n">rot</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+    <span class="n">flip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+<span class="n">display_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|11.633] Loading asset [name=&#39;camera_main&#39;]
+[I|11.634] .. Asset [name=&#39;camera_main&#39;] has been already loaded. Replacing..
+[I|11.634] Loading asset [name=&#39;model_obj&#39;]
+[I|11.634] .. Asset [name=&#39;model_obj&#39;] has been already loaded. Replacing..
+[I|11.634] .. Loading OBJ file [path=&#39;bunny_with_planes.obj&#39;]
+[I|11.770] Loading asset [name=&#39;mat_diffuse_white&#39;]
+[I|11.771] .. Asset [name=&#39;mat_diffuse_white&#39;] has been already loaded. Replacing..
+[I|11.771] Loading asset [name=&#39;tex_floor&#39;]
+[I|11.771] .. Asset [name=&#39;tex_floor&#39;] has been already loaded. Replacing..
+[I|11.771] .. Loading texture [path=&#39;default.png&#39;]
+[I|11.772] Loading asset [name=&#39;mat_floor&#39;]
+[I|11.773] .. Asset [name=&#39;mat_floor&#39;] has been already loaded. Replacing..
+[I|11.773] Loading asset [name=&#39;light_env&#39;]
+[I|11.773] .. Loading texture [path=&#39;flower_road_1k.hdr&#39;]
+[I|11.805] Building acceleration structure [name=&#39;accel&#39;]
+[I|11.805] .. Flattening scene
+[I|11.810] .. Building
+[I|11.857] Loading asset [name=&#39;film&#39;]
+[I|11.857] .. Asset [name=&#39;film&#39;] has been already loaded. Replacing..
+[I|11.873] Loading asset [name=&#39;renderer&#39;]
+[I|11.873] .. Asset [name=&#39;renderer&#39;] has been already loaded. Replacing..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a63b212bbc6649ba82f0800b1258f36a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/executed_functest_func_lights_12_2.png" src="../_images/executed_functest_func_lights_12_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Point-light">
+<h3>Point light<a class="headerlink" href="#Point-light" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">light::point</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scene</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">lmscene</span><span class="o">.</span><span class="n">bunny_with_point_light</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">scene_path</span><span class="p">,</span> <span class="n">mat_knob</span><span class="o">=</span><span class="n">mat</span><span class="o">.</span><span class="n">loc</span><span class="p">())</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+<span class="n">display_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|22.832] Loading asset [name=&#39;camera_main&#39;]
+[I|22.832] .. Asset [name=&#39;camera_main&#39;] has been already loaded. Replacing..
+[I|22.832] Loading asset [name=&#39;model_obj&#39;]
+[I|22.833] .. Asset [name=&#39;model_obj&#39;] has been already loaded. Replacing..
+[I|22.833] .. Loading OBJ file [path=&#39;bunny_with_planes.obj&#39;]
+[I|22.967] Loading asset [name=&#39;mat_diffuse_white&#39;]
+[I|22.967] .. Asset [name=&#39;mat_diffuse_white&#39;] has been already loaded. Replacing..
+[I|22.968] Loading asset [name=&#39;tex_floor&#39;]
+[I|22.968] .. Asset [name=&#39;tex_floor&#39;] has been already loaded. Replacing..
+[I|22.968] .. Loading texture [path=&#39;default.png&#39;]
+[I|22.968] Loading asset [name=&#39;mat_floor&#39;]
+[I|22.969] .. Asset [name=&#39;mat_floor&#39;] has been already loaded. Replacing..
+[I|22.969] Loading asset [name=&#39;light_point&#39;]
+[I|22.972] Building acceleration structure [name=&#39;accel&#39;]
+[I|22.973] .. Flattening scene
+[I|22.977] .. Building
+[I|23.022] Loading asset [name=&#39;film&#39;]
+[I|23.022] .. Asset [name=&#39;film&#39;] has been already loaded. Replacing..
+[I|23.036] Loading asset [name=&#39;renderer&#39;]
+[I|23.036] .. Asset [name=&#39;renderer&#39;] has been already loaded. Replacing..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dec1875c61214f0dad0ee12db8eb7748", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/executed_functest_func_lights_14_2.png" src="../_images/executed_functest_func_lights_14_2.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Directional-light">
+<h3>Directional light<a class="headerlink" href="#Directional-light" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">light::directional</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scene</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">lmscene</span><span class="o">.</span><span class="n">bunny_with_directional_light</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">scene_path</span><span class="p">,</span> <span class="n">mat_knob</span><span class="o">=</span><span class="n">mat</span><span class="o">.</span><span class="n">loc</span><span class="p">())</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+<span class="n">display_image</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[I|34.129] Loading asset [name=&#39;camera_main&#39;]
+[I|34.129] .. Asset [name=&#39;camera_main&#39;] has been already loaded. Replacing..
+[I|34.129] Loading asset [name=&#39;model_obj&#39;]
+[I|34.129] .. Asset [name=&#39;model_obj&#39;] has been already loaded. Replacing..
+[I|34.129] .. Loading OBJ file [path=&#39;bunny_with_planes.obj&#39;]
+[I|34.264] Loading asset [name=&#39;mat_diffuse_white&#39;]
+[I|34.264] .. Asset [name=&#39;mat_diffuse_white&#39;] has been already loaded. Replacing..
+[I|34.264] Loading asset [name=&#39;tex_floor&#39;]
+[I|34.264] .. Asset [name=&#39;tex_floor&#39;] has been already loaded. Replacing..
+[I|34.264] .. Loading texture [path=&#39;default.png&#39;]
+[I|34.265] Loading asset [name=&#39;mat_floor&#39;]
+[I|34.265] .. Asset [name=&#39;mat_floor&#39;] has been already loaded. Replacing..
+[I|34.265] Loading asset [name=&#39;light_directional&#39;]
+[I|34.269] Building acceleration structure [name=&#39;accel&#39;]
+[I|34.269] .. Flattening scene
+[I|34.273] .. Building
+[I|34.318] Loading asset [name=&#39;film&#39;]
+[I|34.318] .. Asset [name=&#39;film&#39;] has been already loaded. Replacing..
+[I|34.331] Loading asset [name=&#39;renderer&#39;]
+[I|34.331] .. Asset [name=&#39;renderer&#39;] has been already loaded. Replacing..
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5f89382375a546ce9e985745e1482952", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/executed_functest_func_lights_16_2.png" src="../_images/executed_functest_func_lights_16_2.png" />
+</div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"0702a8177d5345a3a68ca516af718c9b": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "1e48652c3cb94d308ba78de881dcf601": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3bfa8264ccaf4ffbad461d49ae81bdd3": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_0702a8177d5345a3a68ca516af718c9b", "placeholder": "\u200b", "style": "IPY_MODEL_43cdb30f5bd54ec1ac1117d8c947d074", "value": "103%"}}, "43cdb30f5bd54ec1ac1117d8c947d074": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "44cb623a5c4b4200a4d48035c764feaf": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_5685030373d44386a8da098d3cbc6da6", "placeholder": "\u200b", "style": "IPY_MODEL_48ea1f34c72f4cb4a90cd7246c522aa9", "value": " 10.325/10.0 [00:10&lt;00:00,  1.00it/s]"}}, "46758f8433e8490f9abc5ed626a5d615": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "475d9d4ee5cb45f09a91ad7e0aadefe2": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_d24c8a15b9d2441099f5fe87e9d80b27", "max": 10.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_a1b6bd63c845496fb1cf996197f6e6f6", "value": 10.0}}, "48ea1f34c72f4cb4a90cd7246c522aa9": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "4c0c56a24f014f61b73a90aa21622807": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5685030373d44386a8da098d3cbc6da6": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5837bad167cc4286b6b33a44bc86feef": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "5a4b9064f7a54ac4a3b99e23ff672619": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "5a50ba060f2e4336812122ed17185b47": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5def8391fda2467ba9d03afad2058648": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "5f89382375a546ce9e985745e1482952": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_3bfa8264ccaf4ffbad461d49ae81bdd3", "IPY_MODEL_8beccd6e0df24314b53e3713e68b36e5", "IPY_MODEL_44cb623a5c4b4200a4d48035c764feaf"], "layout": "IPY_MODEL_7be50b378b1b4d43a21012ff793d30c2"}}, "62d7d8252bf143449786c7c91ec7528d": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "6d09534d90f144a88d67650ff6f19a8c": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "705962b2f62a4a9cb0dfd7a1a5a3d49f": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "70d0d2a8124740558244ff56ce65d615": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "72a0039dbebd4667a84bfcf0c9b56ac2": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "74316b35764f4cadb25536d3bb2714da": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_a0dfe7d42d344ace84321fe3c94d8e48", "IPY_MODEL_475d9d4ee5cb45f09a91ad7e0aadefe2", "IPY_MODEL_a8b8d3abefc2439d99c7213982491b85"], "layout": "IPY_MODEL_c06156e116c6494a9030e349130335f5"}}, "750a26c66c7742f1a8239ea0a3459c1a": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7be50b378b1b4d43a21012ff793d30c2": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7cdb8701576542b7a05e3746bf08b463": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_70d0d2a8124740558244ff56ce65d615", "placeholder": "\u200b", "style": "IPY_MODEL_5a4b9064f7a54ac4a3b99e23ff672619", "value": " 10.302/10.0 [00:10&lt;00:00,  1.00it/s]"}}, "8beccd6e0df24314b53e3713e68b36e5": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_46758f8433e8490f9abc5ed626a5d615", "max": 10.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_de23ec7f0a8147e09d012ef0c89a9cc9", "value": 10.0}}, "90298e41a76546f6985abb3794a79743": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a0dfe7d42d344ace84321fe3c94d8e48": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_705962b2f62a4a9cb0dfd7a1a5a3d49f", "placeholder": "\u200b", "style": "IPY_MODEL_62d7d8252bf143449786c7c91ec7528d", "value": ""}}, "a1b6bd63c845496fb1cf996197f6e6f6": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "a4d2cb9d64c64e858e2795912447088f": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a63b212bbc6649ba82f0800b1258f36a": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_bc577d048ae64b2aa88faa91874d15ea", "IPY_MODEL_b10f577f3c594848b87e6383a5c24063", "IPY_MODEL_7cdb8701576542b7a05e3746bf08b463"], "layout": "IPY_MODEL_4c0c56a24f014f61b73a90aa21622807"}}, "a8b8d3abefc2439d99c7213982491b85": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_5a50ba060f2e4336812122ed17185b47", "placeholder": "\u200b", "style": "IPY_MODEL_6d09534d90f144a88d67650ff6f19a8c", "value": " 10.699/? [00:10&lt;00:00,  1.00s/it]"}}, "aafb58fb70ab49bcbcf14813868eb2cd": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_72a0039dbebd4667a84bfcf0c9b56ac2", "placeholder": "\u200b", "style": "IPY_MODEL_e9edd9ffb7a74d54a445645c28cb8937", "value": " 10.483/10.0 [00:10&lt;00:00,  1.00it/s]"}}, "ac4b7802b0fc426bb867488855c880f4": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "b10f577f3c594848b87e6383a5c24063": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_ac4b7802b0fc426bb867488855c880f4", "max": 10.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_5def8391fda2467ba9d03afad2058648", "value": 10.0}}, "bc577d048ae64b2aa88faa91874d15ea": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_a4d2cb9d64c64e858e2795912447088f", "placeholder": "\u200b", "style": "IPY_MODEL_5837bad167cc4286b6b33a44bc86feef", "value": "103%"}}, "c06156e116c6494a9030e349130335f5": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "d24c8a15b9d2441099f5fe87e9d80b27": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "db21cf9fe4684dac8b17525a40d68dfd": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_90298e41a76546f6985abb3794a79743", "max": 10.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_df38c78d7dfe48d4a0fd2ecd4ca4b829", "value": 10.0}}, "de23ec7f0a8147e09d012ef0c89a9cc9": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "dec1875c61214f0dad0ee12db8eb7748": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_e24d08fcd40a42a0b493b592da1c6231", "IPY_MODEL_db21cf9fe4684dac8b17525a40d68dfd", "IPY_MODEL_aafb58fb70ab49bcbcf14813868eb2cd"], "layout": "IPY_MODEL_1e48652c3cb94d308ba78de881dcf601"}}, "df38c78d7dfe48d4a0fd2ecd4ca4b829": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "e24d08fcd40a42a0b493b592da1c6231": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_750a26c66c7742f1a8239ea0a3459c1a", "placeholder": "\u200b", "style": "IPY_MODEL_e489f72ee7ea42f7b6ef9ec9cd928fc1", "value": "105%"}}, "e489f72ee7ea42f7b6ef9ec9cd928fc1": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "e9edd9ffb7a74d54a445645c28cb8937": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}}, "version_major": 2, "version_minor": 0}
+</script></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="func_materials.html" class="btn btn-neutral float-left" title="Materials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="func_renderers.html" class="btn btn-neutral float-right" title="Renderers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tests in Lightmetrica &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="example.html" />
+    <link rel="prev" title="Path sampling" href="path_sampling.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tests in Lightmetrica</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#test-types">Test types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unit-test">Unit test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functional-test">Functional test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-test">Performance test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#statistical-test">Statistical test</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#executing-tests">Executing tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#executing-unit-tests">Executing unit tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#executing-functional-tests">Executing functional tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Tests in Lightmetrica</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/test.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="tests-in-lightmetrica">
+<h1>Tests in Lightmetrica<a class="headerlink" href="#tests-in-lightmetrica" title="Permalink to this headline"></a></h1>
+<div class="section" id="test-types">
+<h2>Test types<a class="headerlink" href="#test-types" title="Permalink to this headline"></a></h2>
+<p>Lightmetrica implements various tests to maintain the quality of the framework. We are using four types of the tests: <em>unit test</em>, <em>functional test</em>, <em>performance test</em>, and <em>statistical tests</em>.</p>
+<p>All tests are designed to be automated and integrated into continuous integration (CI) services. Using CI services, we can check the consistency of the tests for every commit to the repository. If a commit breaks a test, the developer is immediately notified the failure. Also, some of the tests that is not determined by assertions are written in Jupyter notebooks and directly integrated into the documentation after the execution in the CI service.</p>
+<div class="section" id="unit-test">
+<h3>Unit test<a class="headerlink" href="#unit-test" title="Permalink to this headline"></a></h3>
+<p><em>Unit testing</em> is responsible for the tests of individual components of the framework. We mainly use unit testing to test internal features like component object manipulation, assets management, or scene management. In addition to the tests of the internal features written in C++, we also provide unit tests for the Python binding of the framework.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hi2p-perim/lightmetrica-v3/tree/master/test">Unit tests in C++</a></p></li>
+<li><p><a class="reference external" href="https://github.com/hi2p-perim/lightmetrica-v3/tree/master/pytest">Unit tests in Python</a></p></li>
+</ul>
+</div>
+<div class="section" id="functional-test">
+<h3>Functional test<a class="headerlink" href="#functional-test" title="Permalink to this headline"></a></h3>
+<p><em>Functional testing</em> is responsible for testing behavioral aspects of the framework without requiring internal knowledge of the framework. In other words, functional testing is in charge for the tests of possible usage by users using only the exposed APIs. In software development, functional testing is coined as a test to check if software or library functions properly according to the requirements. This means we can use functional tests to define the requirements of the framework.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="example.html#example"><span class="std std-ref">Examples</span></a></p></li>
+<li><p><a class="reference internal" href="functest.html#functest"><span class="std std-ref">Functional tests</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="performance-test">
+<h3>Performance test<a class="headerlink" href="#performance-test" title="Permalink to this headline"></a></h3>
+<p><em>Performance testing</em> is responsible for testing performance requirements of the framework. We rather focus on testing relative performance rather than absolute performance, because relative performance comparison is what research and development requires. We mainly use the tests to compare performances of multiple implementations of the same interface, for instance, the performance of acceleration structures, scene loading, etc.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="perftest.html#perftest"><span class="std std-ref">Performance tests</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="statistical-test">
+<h3>Statistical test<a class="headerlink" href="#statistical-test" title="Permalink to this headline"></a></h3>
+<p><em>Statistical testing</em> is responsible for testing correctness of the behavior of the framework using statistical approaches. We can describe statistical test being a kind of functional test where the correctness of the behavior is evaluated only by the statistical verification. We used the tests to verify the correctness of sampling functions or rendering techniques.</p>
+</div>
+</div>
+<div class="section" id="executing-tests">
+<h2>Executing tests<a class="headerlink" href="#executing-tests" title="Permalink to this headline"></a></h2>
+<div class="section" id="executing-unit-tests">
+<h3>Executing unit tests<a class="headerlink" href="#executing-unit-tests" title="Permalink to this headline"></a></h3>
+<p>To execute unit tests, run the following command after <a class="reference internal" href="build.html#building-from-source"><span class="std std-ref">building the framework from source</span></a>.
+You may need to specify <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> for testing of plugins in Linux environment.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> &lt;lightmetrica binary directory&gt;
+<span class="gp">$ </span>./lm_test                     <span class="c1"># Windows</span>
+<span class="gp">$ </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>. ./lm_test   <span class="c1"># Linux</span>
+</pre></div>
+</div>
+<p>Additionally, you can execute the Python tests with the following commands.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> &lt;<span class="nb">source</span> directory&gt;
+<span class="gp">$ </span>python -m pytest --lm &lt;lightmetrica binary dir&gt; pytest
+</pre></div>
+</div>
+</div>
+<div class="section" id="executing-functional-tests">
+<span id="id1"></span><h3>Executing functional tests<a class="headerlink" href="#executing-functional-tests" title="Permalink to this headline"></a></h3>
+<p>To execute all functional tests, you first want to create <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file
+where the runtime information is written. <code class="docutils literal notranslate"><span class="pre">.lmenv</span></code> file is a simple JSON file having a format as follows:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;Source directory&gt;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;bin_path&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;Binary directory&gt;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;scene_path&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;Scene directory&gt;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Put this file in <code class="docutils literal notranslate"><span class="pre">functest</span></code> directory, and run the follow commands to execute all functional tests. The command executes the Jupyter notebooks inside the <code class="docutils literal notranslate"><span class="pre">functest</span></code> directory and outputs the executed notebook in the <code class="docutils literal notranslate"><span class="pre">executed_functest</span></code> directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> functest
+<span class="gp">$ </span>python run_all.py
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="path_sampling.html" class="btn btn-neutral float-left" title="Path sampling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Built-in component reference &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"jax": ["input/TeX", "output/HTML-CSS"], "HTML-CSS": {"availableFonts": ["TeX"], "scale": 90}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api_ref.html" />
+    <link rel="prev" title="Performance testing of serialization" href="executed_functest/perf_serial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Built-in component reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#material">Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#camera">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#light">Light</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#medium">Medium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#volume">Volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase">Phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mesh">Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acceleration-structure">Acceleration structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#film">Film</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Built-in component reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/component_ref.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="built-in-component-reference">
+<span id="component-ref"></span><h1>Built-in component reference<a class="headerlink" href="#built-in-component-reference" title="Permalink to this headline"></a></h1>
+<p>This section describes build-in components.
+The label of each entry shows the key with <code class="docutils literal notranslate"><span class="pre">interface::implementation</span></code> format used in the instantiation of the component.
+The parameters of the components are given as an argument of Json type to <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function.</p>
+<div class="section" id="material">
+<h2>Material<a class="headerlink" href="#material" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm8MaterialE" title="lm::Material"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Material</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::diffuse</span></span></dt>
+<dd><p>Lambertian diffuse model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mapKd</strong> (<em>str</em>) – Diffuse reflectance as texture specified by
+asset name or locator.</p></li>
+<li><p><strong>Kd</strong> (<em>color</em>) – Diffuse reflectance as color value.
+If both <code class="docutils literal notranslate"><span class="pre">mapKd</span></code> and <code class="docutils literal notranslate"><span class="pre">Kd</span></code> are specified,
+<code class="docutils literal notranslate"><span class="pre">mapKd</span></code> has priority. Default: <code class="docutils literal notranslate"><span class="pre">[1,1,1]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This component implements Lambertian diffuse BRDF defined as</p>
+<div class="math notranslate nohighlight">
+\[f_r(\omega_i, \omega_o) = \frac{\rho}{\pi},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is diffuse reflectance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::glossy</span></span></dt>
+<dd><p>Cook-Torrance BRDF with anisotropic GGX as NDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ks</strong> (<em>color</em>) – Specular reflectance.</p></li>
+<li><p><strong>ax</strong> (<em>float</em>) – <span class="math notranslate nohighlight">\(\alpha_x\)</span> parameter in anisotropic GGX.</p></li>
+<li><p><strong>ay</strong> (<em>float</em>) – <span class="math notranslate nohighlight">\(\alpha_y\)</span> parameter in anisotropic GGX.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::mirror</span></span></dt>
+<dd><p>Ideal mirror reflection.</p>
+<p>This component implements ideal mirror reflection BRDF:</p>
+<div class="math notranslate nohighlight">
+\[f_r(\omega_i, \omega_o) = \delta_\Omega(\omega_{\mathrm{refl}}, \omega_o),\]</div>
+<p>where
+<span class="math notranslate nohighlight">\(\omega_{\mathrm{refl}}\equiv2(\omega_i\cdot\mathbf{n})\mathbf{n} - \omega_i\)</span>
+is the reflected direction of <span class="math notranslate nohighlight">\(\omega_i\)</span>, and
+<span class="math notranslate nohighlight">\(\delta_\Omega\)</span> is the Dirac delta function w.r.t. solid angle measure:
+<span class="math notranslate nohighlight">\(\int_\Omega \delta_\Omega(\omega', \omega) d\omega = \omega'\)</span>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::glass</span></span></dt>
+<dd><p>Fresnel reflection and refraction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Ni</strong> (<em>float</em>) – Relative index of refraction.</p>
+</dd>
+</dl>
+<p>This component implement Fresnel reflection and refraction BSDF, which reads</p>
+<div class="math notranslate nohighlight">
+\[f_s(\omega_i, \omega_o)
+= F\, \delta_\Omega(\omega_{\mathrm{refl}}, \omega_o)
++ (1-F)\, \delta_\Omega(\omega_{\mathrm{refr}}, \omega_o),\]</div>
+<p>where <span class="math notranslate nohighlight">\(F\)</span> is Fresnel term and <span class="math notranslate nohighlight">\(\delta_\Omega\)</span> is
+the Dirac delta function w.r.t. solid angle measure.
+<span class="math notranslate nohighlight">\(\omega_{\mathrm{refl}}\)</span> and <span class="math notranslate nohighlight">\(\omega_{\mathrm{refr}}\)</span>
+are reflected and refracted directions of <span class="math notranslate nohighlight">\(\omega_i\)</span> respectively defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\omega_{\mathrm{refl}}
+    &amp;=&amp; 2(\omega_i\cdot\mathbf{n})\mathbf{n} - \omega_i, \\
+\omega_{\mathrm{refr}}
+    &amp;=&amp; -\eta\omega_i
+        + \left[
+            \eta(\omega_i\cdot\mathbf{n})-\sqrt{1-\eta^2(1-(\omega_i\cdot\mathbf{n})^2)}
+            \right] \mathbf{n},
+\end{eqnarray}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{n}\)</span> is the shading normal on a position of the scene surface
+and <span class="math notranslate nohighlight">\(\eta\)</span> is relative index of refraction: <span class="math notranslate nohighlight">\(\eta\equiv\frac{n_i}{n_t}\)</span>
+where <span class="math notranslate nohighlight">\(n_i\)</span> and <span class="math notranslate nohighlight">\(n_t\)</span> is the index of refraction of the media on
+incident and transmitted sides of scene surface respectively.</p>
+<p>For Fresnel term, we used Schlick’s approximation <a class="reference internal" href="#schlick1994" id="id1"><span>[Schlick1994]</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{eqnarray}
+F = R_0 + (1-R_0)(1-(\omega_i\cdot\mathbf{n})^2),\;
+R_0 = \left( \frac{1-\eta}{1+\eta} \right)^2.
+\end{eqnarray}\]</div>
+<p>Reflection or refraction is determined by sampling Fresnel term.</p>
+<dl class="citation">
+<dt class="label" id="schlick1994"><span class="brackets"><a class="fn-backref" href="#id1">Schlick1994</a></span></dt>
+<dd><p>C. Schlick.
+An Inexpensive BRDF Model for Physically-based Rendering.
+Computer Graphics Forum. 13 (3): 233. 1994.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::proxy</span></span></dt>
+<dd><p>Proxy material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ref</strong> (<em>str</em>) – Asset name or locator of the referencing material.</p>
+</dd>
+</dl>
+<p>This component gives proxy interface to the other predefined material.
+This component is useful when we want to reuse predefined material
+but we also need to create a new instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::mask</span></span></dt>
+<dd><p>Pass-through material.</p>
+<p>This component implements a special material that only sample
+the outgoing ray into the same direction as the incoming ray.
+This material is used to implement texture-masked materials.
+BSDF reads</p>
+<div class="math notranslate nohighlight">
+\[f_s(\omega_i, \omega_o) = \delta_\Omega(-\omega_i, \omega_o).\]</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::proxy</span></span></dt>
+<dd><p>Proxy material.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ref</strong> (<em>str</em>) – Asset name or locator of the referencing material.</p>
+</dd>
+</dl>
+<p>This component gives proxy interface to the other predefined material.
+This component is useful when we want to reuse predefined material
+but we also need to create a new instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::constant_weight_mixture_rr</span></span></dt>
+<dd><p>Mixture material with constant weights (using Russian roulette).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entries</strong> (<em>list</em>) – A list of tupels (<code class="docutils literal notranslate"><span class="pre">material</span></code>, <code class="docutils literal notranslate"><span class="pre">weight</span></code>)
+where <code class="docutils literal notranslate"><span class="pre">material</span></code> is a locator to the underlying material
+and <code class="docutils literal notranslate"><span class="pre">weight</span></code> is the weight multiplied by the BSDF of the material.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::constant_weight_mixture_marginalized</span></span></dt>
+<dd><p>Mixture material with constant weights (using marginalization).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entries</strong> (<em>list</em>) – A list of tupels (<code class="docutils literal notranslate"><span class="pre">material</span></code>, <code class="docutils literal notranslate"><span class="pre">weight</span></code>)
+where <code class="docutils literal notranslate"><span class="pre">material</span></code> is a locator to the underlying material
+and <code class="docutils literal notranslate"><span class="pre">weight</span></code> is the weight multiplied by the BSDF of the material.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">material::mixture_wavefrontobj</span></span></dt>
+<dd><p>Mixture material for Wavefront OBJ model.</p>
+<p>This asset is internally used by the framework.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="camera">
+<h2>Camera<a class="headerlink" href="#camera" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm6CameraE" title="lm::Camera"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Camera</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">camera::pinhole</span></span></dt>
+<dd><p>Pinhole camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>film</strong> (<em>str</em>) – Underlying film specified by asset name or locator.</p></li>
+<li><p><strong>position</strong> (<em>vec3</em>) – Camera position.</p></li>
+<li><p><strong>center</strong> (<em>vec3</em>) – Look-at position.</p></li>
+<li><p><strong>up</strong> (<em>vec3</em>) – Up vector.</p></li>
+<li><p><strong>vfov</strong> (<em>float</em>) – Vertical field of view.</p></li>
+<li><p><strong>aspect</strong> – Aspect ratio (height / width).</p></li>
+</ul>
+</dd>
+</dl>
+<p>This component implements pinhole camera where all the incoming lights pass through
+an small aperture and projected onto a film in the opposite side of the aperture.
+Unlike real pinhole camera, the apearture is modeled as a point,
+and the film can be placed in front of the pinhole.</p>
+<p>The configuration of the pinhole camera is described by a 3-tuple by
+<code class="docutils literal notranslate"><span class="pre">position</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">up</span></code> vector.
+<code class="docutils literal notranslate"><span class="pre">position</span></code> represents a position of the pinhole,
+<code class="docutils literal notranslate"><span class="pre">center</span></code> for look-at position. This means the camera faces toward
+the direction to <code class="docutils literal notranslate"><span class="pre">center</span></code> from <code class="docutils literal notranslate"><span class="pre">position</span></code>.
+<code class="docutils literal notranslate"><span class="pre">up</span></code> describes the upward direction of the camera.</p>
+<p>Field of view (FoV) describe the extent of the viewing angle of the camera.
+In this implementation, the configuration is given by <code class="docutils literal notranslate"><span class="pre">vfov</span></code> parameter.
+Note that we adopted vertical FoV. Be careful if you want to convert from
+other tools that might adopt horizontal FoV.</p>
+<p>The aspect ratio must be specified as a parameter of the film.
+If the aspect ratio is different from that can be calculated from the film,
+the skieed image will be recorded.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="light">
+<h2>Light<a class="headerlink" href="#light" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm5LightE" title="lm::Light"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Light</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">light::area</span></span></dt>
+<dd><p>Area light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ke</strong> (<em>color</em>) – Luminance.</p></li>
+<li><p><strong>mesh</strong> (<em>str</em>) – Underlying mesh specified by asset name or locator.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">light::env</span></span></dt>
+<dd><p>Environment light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>envmap_path</strong> (<em>str</em>) – Path to environment map.</p></li>
+<li><p><strong>rot</strong> (<em>float</em>) – Rotation angle of the environment map around up vector in degrees.
+Default value: 0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">light::envconst</span></span></dt>
+<dd><p>Constant environment light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Le</strong> (<em>color</em>) – Luminance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">light::point</span></span></dt>
+<dd><p>Point light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Le</strong> (<em>color</em>) – Luminance.</p></li>
+<li><p><strong>position</strong> (<em>vec3</em>) – Position of the light.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">light::directional</span></span></dt>
+<dd><p>Directional light.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Le</strong> (<em>color</em>) – Luminance.</p></li>
+<li><p><strong>direction</strong> (<em>vec3</em>) – Direction of the light.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="medium">
+<h2>Medium<a class="headerlink" href="#medium" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm6MediumE" title="lm::Medium"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Medium</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">medium::homogeneous</span></span></dt>
+<dd><p>Homogeneous medium.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> (<em>float</em>) – Density of the medium.</p></li>
+<li><p><strong>albedo</strong> (<em>color</em>) – Albedo of the medium.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – Locator to <code class="docutils literal notranslate"><span class="pre">phase</span></code> asset.</p></li>
+<li><p><strong>bound_min</strong> (<em>vec3</em>) – Minimum bound of the volume.</p></li>
+<li><p><strong>bound_max</strong> (<em>vec3</em>) – Maximum bound of the volume.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">medium::heterogeneous</span></span></dt>
+<dd><p>Heterogeneous medium.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> (<em>str</em>) – Locator to <code class="docutils literal notranslate"><span class="pre">volume</span></code> asset representing density of the medium.</p></li>
+<li><p><strong>albedo</strong> (<em>str</em>) – Locator to <code class="docutils literal notranslate"><span class="pre">volume</span></code> asset representing albedo of the medium.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – Locator to <code class="docutils literal notranslate"><span class="pre">phase</span></code> asset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="volume">
+<h2>Volume<a class="headerlink" href="#volume" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm6VolumeE" title="lm::Volume"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Volume</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">volume::constant</span></span></dt>
+<dd><p>Constant volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>color</em>) – Stored color value.</p></li>
+<li><p><strong>scalar</strong> (<em>float</em>) – Stored scalar value.</p></li>
+<li><p><strong>bound_min</strong> (<em>float</em>) – Minimum bound of the volume.</p></li>
+<li><p><strong>bound_max</strong> (<em>float</em>) – Maximum bound of the volume.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">volume::checker</span></span></dt>
+<dd><p>Checker volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bound_min</strong> (<em>float</em>) – Minimum bound of the volume.</p></li>
+<li><p><strong>bound_max</strong> (<em>float</em>) – Maximum bound of the volume.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="phase">
+<h2>Phase<a class="headerlink" href="#phase" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm5PhaseE" title="lm::Phase"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Phase</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">phase::isotropic</span></span></dt>
+<dd><p>Isotropic phase function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">phase::hg</span></span></dt>
+<dd><p>Henyey-Greenstein phase function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> (<em>float</em>) – Asymmetry parameter in [-1,1].</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="mesh">
+<h2>Mesh<a class="headerlink" href="#mesh" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm4MeshE" title="lm::Mesh"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Mesh</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">mesh::raw</span></span></dt>
+<dd><p>Mesh from raw data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ps</strong> (<em>list</em>) – Vertex positions of the mesh.</p></li>
+<li><p><strong>ns</strong> (<em>list</em>) – Vertex normals of the mesh.</p></li>
+<li><p><strong>ts</strong> (<em>list</em>) – Texture coordinates for the vertices.</p></li>
+<li><p><strong>fs</strong> (<em>dist</em>) – Index list. Indices for each vertex element are
+specified by <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">t</span></code>, and <code class="docutils literal notranslate"><span class="pre">n</span></code> respectively.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">mesh::wavefrontobj_ref</span></span></dt>
+<dd><p>Mesh for Wavefront OBJ model.</p>
+<p>This asset is internally used by the framework.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="texture">
+<h2>Texture<a class="headerlink" href="#texture" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm7TextureE" title="lm::Texture"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Texture</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">texture::constant</span></span></dt>
+<dd><p>Texture with constant color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>color</em>) – Color.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Alpha value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">texture::bitmap</span></span></dt>
+<dd><p>Bitmap texture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to texture.</p></li>
+<li><p><strong>flip</strong> (<em>bool</em>) – Flip loaded texture if true.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm5ModelE" title="lm::Model"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Model</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">model::wavefrontobj</span></span></dt>
+<dd><p>Wavefront OBJ model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="acceleration-structure">
+<h2>Acceleration structure<a class="headerlink" href="#acceleration-structure" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm5AccelE" title="lm::Accel"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Accel</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">accel::sahbvh</span></span></dt>
+<dd><p>Bounding volume hierarchy with surface area heuristics.</p>
+<p>Features</p>
+<ul class="simple">
+<li><p>Parallel construction.</p></li>
+<li><p>Split axis is determined by longest axis.</p></li>
+<li><p>Split position is determined by minimum SAH cost.</p></li>
+<li><p>Uses full-sort of underlying geometries.</p></li>
+<li><p>Uses triangle intersection by Möller and Trumbore <a class="reference internal" href="#moller1997" id="id2"><span>[Möller1997]</span></a>.</p></li>
+</ul>
+<dl class="citation">
+<dt class="label" id="moller1997"><span class="brackets"><a class="fn-backref" href="#id2">Möller1997</a></span></dt>
+<dd><p>T. Möller &amp; B. Trumbore.
+Fast, Minimum Storage Ray-Triangle Intersection.
+Journal of Graphics Tools. 2(1):21–28. 1997.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="film">
+<h2>Film<a class="headerlink" href="#film" title="Permalink to this headline"></a></h2>
+<p>Components implementing <a class="reference internal" href="api_ref.html#_CPPv4N2lm4FilmE" title="lm::Film"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Film</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">film::bitmap</span></span></dt>
+<dd><p>Bitmap film.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w</strong> (<em>int</em>) – Width of the film.</p></li>
+<li><p><strong>h</strong> (<em>int</em>) – Height of the film.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This component implements thread-safe bitmap film.
+The invocation of <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Film::setPixel()</span></code> function is thread safe.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="executed_functest/perf_serial.html" class="btn btn-neutral float-left" title="Performance testing of serialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_ref.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

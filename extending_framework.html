@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extending framework &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build System" href="build_system.html" />
+    <link rel="prev" title="Basic rendering" href="basic_rendering.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_rendering.html">Basic rendering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Extending framework</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#component-interface">Component interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-build-environment">Configuring build environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-interface">Implementing interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-extended-feature-from-python-api">Using extended feature from Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#on-advanced-topics">On advanced topics</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Extending framework</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/extending_framework.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="extending-framework">
+<h1>Extending framework<a class="headerlink" href="#extending-framework" title="Permalink to this headline"></a></h1>
+<p>In this section, we will explain how to extend the features of Lightmetrica.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section focuses on describing the concepts rather than providing actual working codes to implement the extensions. For this, you can refer to <a class="reference internal" href="example.html#example"><span class="std std-ref">Examples</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section covers only basic concepts to extend the framework. You will find more detailed discussion about the component object system used in the framework in <a class="reference internal" href="component.html#component"><span class="std std-ref">Component</span></a>.</p>
+</div>
+<div class="section" id="component-interface">
+<h2>Component interface<a class="headerlink" href="#component-interface" title="Permalink to this headline"></a></h2>
+<p>Lightmetrica is designed to be extensible. The most of the features of the framework, e.g., materials, lights, cameras, or rendering techniques, can be implemented as extensions. This allows the developers to design flexible experiments according to their requirements.</p>
+<p>Extension mechanism of Lightmetrica follows well-recognized paradigm of objected-oriented programming (OOP).
+An extensible feature of the framework is provided as an abstract class (interface) of C++.
+To extend a feature, a developer wants to implement a class by inheriting the abstract class.</p>
+<p>A typical extensible interface looks like the following code. This code example is taken from <a class="reference internal" href="api_ref.html#_CPPv4N2lm8RendererE" title="lm::Renderer"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Renderer</span></code></a> class defined in <code class="docutils literal notranslate"><span class="pre">include/lm/renderer.h</span></code> with some clean-ups. For other examples, you can open some headers in <code class="docutils literal notranslate"><span class="pre">include/lm</span></code> directory (e.g., <code class="docutils literal notranslate"><span class="pre">light.h</span></code> or <code class="docutils literal notranslate"><span class="pre">material.h</span></code>).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;component.h&quot;</span><span class="cp"></span>
+
+<span class="n">LM_NAMESPACE_BEGIN</span><span class="p">(</span><span class="n">LM_NAMESPACE</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">class</span> <span class="nc">Renderer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Component</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">Json</span><span class="w"> </span><span class="n">render</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="n">LM_NAMESPACE_END</span><span class="p">(</span><span class="n">LM_NAMESPACE</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>As shown in the example, an extensible interface must inherit the common base class <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a>, which provides a necessary features as a class being managed by the object management system of the framework. Since an extensible interface always inherits <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a>, we call the extensible interface <em>component interface</em>. A component interface contains one or more virtual functions to be implemented by developers in a derived class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the following discussion, all example codes are assumed to be defined inside <code class="docutils literal notranslate"><span class="pre">lm</span></code> namespace.
+In the actual code, this can be done by enclosing the code by <code class="xref c c-func docutils literal notranslate"><span class="pre">LM_NAMESPACE_BEGIN()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">LM_NAMESPACE_END()</span></code> macros by <code class="xref c c-macro docutils literal notranslate"><span class="pre">LM_NAMESPACE</span></code>, which is resolved to <code class="docutils literal notranslate"><span class="pre">lm</span></code>.</p>
+</div>
+</div>
+<div class="section" id="configuring-build-environment">
+<h2>Configuring build environment<a class="headerlink" href="#configuring-build-environment" title="Permalink to this headline"></a></h2>
+<p>You want to follow the recommended practice described in <a class="reference internal" href="managing_experiment.html#managing-experiments"><span class="std std-ref">Managing experiments</span></a> according to your requirements of your experiment.</p>
+</div>
+<div class="section" id="implementing-interface">
+<h2>Implementing interface<a class="headerlink" href="#implementing-interface" title="Permalink to this headline"></a></h2>
+<p>Once you identify the component interface that you want to extend, the next step would be to implement your own class by inheriting the interface. For instance, the following code implements <a class="reference internal" href="api_ref.html#_CPPv4N2lm8RendererE" title="lm::Renderer"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Renderer</span></code></a> class, which just generates a blank image with the color given as a parameter.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;lm/renderer.h&gt;</span><span class="cp"></span>
+<span class="c1">// ...</span>
+
+<span class="k">class</span> <span class="nc">Renderer_Blank</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Renderer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">Vec3</span><span class="w"> </span><span class="n">color_</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Film</span><span class="o">*</span><span class="w"> </span><span class="n">film_</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">construct</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Json</span><span class="o">&amp;</span><span class="w"> </span><span class="n">prop</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">color_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">json</span><span class="o">::</span><span class="n">value</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;color&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">film_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">json</span><span class="o">::</span><span class="n">comp_ref</span><span class="o">&lt;</span><span class="n">Film</span><span class="o">&gt;</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">Json</span><span class="w"> </span><span class="n">render</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">film_</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">film_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">h</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">film_</span><span class="o">-&gt;</span><span class="n">set_pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">color_</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="n">LM_COMP_REG_IMPL</span><span class="p">(</span><span class="n">Renderer_Blank</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;renderer::blank&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>You need to register the implemented class to the framework using <a class="reference internal" href="api_ref.html#c.LM_COMP_REG_IMPL" title="LM_COMP_REG_IMPL"><code class="xref c c-macro docutils literal notranslate"><span class="pre">LM_COMP_REG_IMPL</span></code></a> macro, which takes the type of the implemented class and the identifier (in <code class="docutils literal notranslate"><span class="pre">renderer::&lt;name&gt;</span></code> format). The identifier is used to create the instance of the component from Python API.</p>
+<p>In the class we implement two functions. <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function implements an function being called when the component instance is created. The function is a virtual function exposed in <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> class. <a class="reference internal" href="api_ref.html#_CPPv4N2lm9Component9constructERK4Json" title="lm::Component::construct"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Component::construct()</span></code></a> function takes a parameter <code class="docutils literal notranslate"><span class="pre">prop</span></code> of <code class="docutils literal notranslate"><span class="pre">lm::Json</span></code> type, which is typically passed from Python API.</p>
+<p>We can pass arbitrary parameters as long as the framework supports serialization of the type.
+We can get the values from <code class="docutils literal notranslate"><span class="pre">prop</span></code> using the API of <a class="reference external" href="https://github.com/nlohmann/json">nlohmann/json</a> library, which is used to implement the feature, or the functions in <code class="docutils literal notranslate"><span class="pre">lm::json</span></code> namespace.</p>
+<p>In this example, <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::json::value()</span></code> function checks <code class="docutils literal notranslate"><span class="pre">color</span></code> key in the given Json object. If the key is found, it tries to convert the underlying value to the type specified by the type parameter <code class="docutils literal notranslate"><span class="pre">Vec3</span></code>. If the key is not found, or the type of the underlying value cannot be converted to <code class="docutils literal notranslate"><span class="pre">Vec3</span></code>, the function throws an exception. <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">json::comp_ref()</span></code> function is used to get an instance of the other component using a given <a class="reference internal" href="basic_rendering.html#accessing-instance"><span class="std std-ref">asset locator</span></a>.</p>
+<p><a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Renderer6renderEv" title="lm::Renderer::render"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Renderer::render()</span></code></a> function implements the core logic of the renderering technique.
+In this example, it just iterates through every pixel in the given film and set it to a constant color.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All built-in features of Lightmetrica are also implemented as extensions,
+which would be useful references for your implementation.
+You can find them in <code class="docutils literal notranslate"><span class="pre">src/&lt;interface_name&gt;</span></code> directories.</p>
+</div>
+</div>
+<div class="section" id="using-extended-feature-from-python-api">
+<h2>Using extended feature from Python API<a class="headerlink" href="#using-extended-feature-from-python-api" title="Permalink to this headline"></a></h2>
+<p>In the case of <a class="reference internal" href="api_ref.html#_CPPv4N2lm8RendererE" title="lm::Renderer"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Renderer</span></code></a> class, the instance creation of the class corresponds to <code class="docutils literal notranslate"><span class="pre">lm.load_renderer()</span></code> function in Python API. The following code creates a renderer using the identifier (<code class="docutils literal notranslate"><span class="pre">blank</span></code>) which corresponds to the second half of the identifier used for the registration (<code class="docutils literal notranslate"><span class="pre">renderer::blank</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_renderer</span><span class="p">(</span><span class="s1">&#39;renderer&#39;</span><span class="p">,</span> <span class="s1">&#39;blank&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">output</span><span class="o">=</span><span class="n">film</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the usage of the Python API for assets loading, scene creation, or rendering, please refer to <a class="reference internal" href="basic_rendering.html#basic-rendering"><span class="std std-ref">Basic rendering</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Actual usage of the implemented component depends on the interface. Many of the class representing scene assets (e.g., material, light, camera, etc.) can be created by <code class="docutils literal notranslate"><span class="pre">lm.load_*</span></code> function, but some interfaces might use different API or might be used implicitly in the framework.</p>
+</div>
+</div>
+<div class="section" id="on-advanced-topics">
+<h2>On advanced topics<a class="headerlink" href="#on-advanced-topics" title="Permalink to this headline"></a></h2>
+<p>This section doesn’t fully cover the entire feature of the component object system of the framework.
+For the full detail, please refer to <a class="reference internal" href="component.html#component"><span class="std std-ref">Component</span></a>, where we will discuss about the following  advanced concepts:</p>
+<ul class="simple">
+<li><p>Instance creation in C++</p></li>
+<li><p>Different types of instances (owned, weak)</p></li>
+<li><p>Managing component object tree</p></li>
+<li><p>Supporting locator lookup</p></li>
+<li><p>Supporting serialization</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_rendering.html" class="btn btn-neutral float-left" title="Basic rendering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="build_system.html" class="btn btn-neutral float-right" title="Build System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

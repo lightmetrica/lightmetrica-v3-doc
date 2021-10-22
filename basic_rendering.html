@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic rendering &mdash; Lightmetrica Version 3  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Extending framework" href="extending_framework.html" />
+    <link rel="prev" title="Managing experiments" href="managing_experiment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Lightmetrica Version 3
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managing_experiment.html">Managing experiments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lightmetrica-api">Lightmetrica API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#importing-framework">Importing framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-of-framework">Initialization of framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-of-subsystems">Initialization of subsystems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-asset">Loading asset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-lm-load-function">Using <code class="docutils literal notranslate"><span class="pre">lm.load_*()</span></code> function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Using <code class="docutils literal notranslate"><span class="pre">lm.load()</span></code> function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-instance">Accessing instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#passing-instance-as-a-parameter">Passing instance as a parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scene-setup-using-primitives">Scene setup using primitives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-scene-asset">Creating scene asset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-primitive">Creating a primitive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-primitive-with-transformation">Creating a primitive with transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-primitive-generator">Using primitive generator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scene-setup-using-scene-graph">Scene setup using scene graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#node-types">Node types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-node">Creating a node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-a-node-to-scene-graph">Adding a node to scene graph</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-acceleration-structure">Building acceleration structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rendering">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-result">Checking result</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#saving-rendered-image">Saving rendered image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#displaying-rendered-image">Displaying rendered image</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending_framework.html">Extending framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="build_system.html">Build System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_binding.html">Python binding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="path_sampling.html">Path sampling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tests</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Tests in Lightmetrica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functest.html">Functional tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perftest.html">Performance tests</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="component_ref.html">Built-in component reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Lightmetrica Version 3</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Basic rendering</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/basic_rendering.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="basic-rendering">
+<span id="id1"></span><h1>Basic rendering<a class="headerlink" href="#basic-rendering" title="Permalink to this headline"></a></h1>
+<p>In this section, we will introduce the basic rendering feature of Lightmetrica. The topic includes initialization of the framework, loading and managing assets, creating scenes, and rendering.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section focuses on describing the concepts rather than providing actual working codes to render an image.
+For this, you can refer to <a class="reference internal" href="example.html#example"><span class="std std-ref">Examples</span></a>.</p>
+</div>
+<div class="section" id="lightmetrica-api">
+<h2>Lightmetrica API<a class="headerlink" href="#lightmetrica-api" title="Permalink to this headline"></a></h2>
+<p>Lightmetrica exposes API to the two programming languages: Python and C++. Python API is mainly used to organize the experiments. On the other hand, C++ API is mainly used to develop an extension. Both are not identical, but many of the API can be accessible from both environments.</p>
+<p>In this guide, we will often use the references to the functions or classes of the framework. The references link to the corresponding entries in <a class="reference internal" href="api_ref.html#api-ref"><span class="std std-ref">API reference</span></a>. We generate the API references based on C++ API, but the API is also exposed to Python if not specifically mentioned.</p>
+<p>Readers are expected to convert the notations depending on the contexts. For instance, we use a link to <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::init()</span></code> function to represent its Python-API variant <code class="docutils literal notranslate"><span class="pre">lm.init()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike previous versions,
+our framework does not define our own scene definition file to describe the scene and assets.
+This is a design choice as a research-oriented renderer.
+On experiments, the scene is often used with parameters being determined programmatically.
+Even with scene definition file, we thus eventually need to introduce a layer to parameterize the scene definition file.
+In this version of the framework, we introduced comprehensive set of Python APIs,
+so we decided to use Python directly to configure the scene,
+making possible to completely remove a communication layer with scene definition file.</p>
+</div>
+</div>
+<div class="section" id="importing-framework">
+<h2>Importing framework<a class="headerlink" href="#importing-framework" title="Permalink to this headline"></a></h2>
+<p>Assuming that we have finished build and project setup described in <a class="reference internal" href="build.html#build"><span class="std std-ref">Build</span></a> and <span class="xref std std-ref">managing_experimens</span>, we can start using Lightmetrica by importing <code class="docutils literal notranslate"><span class="pre">lightmetrica</span></code> module. In the following documentation, we will use <code class="docutils literal notranslate"><span class="pre">lm</span></code> as an alias of the <code class="docutils literal notranslate"><span class="pre">lightmetrica</span></code> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightmetrica</span> <span class="k">as</span> <span class="nn">lm</span>
+</pre></div>
+</div>
+<p>When we are using the framework in Jupyter notebook, we can use <code class="docutils literal notranslate"><span class="pre">lightmetrica_jupyter</span></code> extension for some useful features.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">lightmetrica_jupyter</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline"></a></h2>
+<div class="section" id="initialization-of-framework">
+<h3>Initialization of framework<a class="headerlink" href="#initialization-of-framework" title="Permalink to this headline"></a></h3>
+<p>We can initialize Lightmetrica with <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::init()</span></code> function and shutdown with <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::shutdown()</span></code> function. In case that you want to reset the internal state, you can use <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::reset()</span></code> function. <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::init()</span></code> function takes optional configuration as an argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If the initialization is successful, you can show the information of the framework using <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::info()</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialization-of-subsystems">
+<h3>Initialization of subsystems<a class="headerlink" href="#initialization-of-subsystems" title="Permalink to this headline"></a></h3>
+<p>A <em>subsystem</em> refers to globally accessible features of the framework, which for instance includes logging, progress reporting, or parallel computation. The related API of a subsystem is exposed under <code class="docutils literal notranslate"><span class="pre">lm.&lt;name_of_subsystem&gt;</span></code> namespace. For convenience, <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::init()</span></code> function initializes various subsystems with default settings.</p>
+<p>We can reconfigure the default settings with <code class="docutils literal notranslate"><span class="pre">lm.&lt;name_of_subsystem&gt;.init()</span></code> function. For instance, logging subsystem (<code class="docutils literal notranslate"><span class="pre">log</span></code>) can be initialized with <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::log::init()</span></code> function. Here, we initialize <code class="docutils literal notranslate"><span class="pre">log</span></code> and <code class="docutils literal notranslate"><span class="pre">progress</span></code> subsystem for Jupyter notebook.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;jupyter&#39;</span><span class="p">)</span>
+<span class="n">lm</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;jupyter&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The internal state of the subsystem are not refreshed by <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::reset()</span></code> function.
+The function only clears the loaded assets.</p>
+</div>
+</div>
+</div>
+<div class="section" id="loading-asset">
+<span id="preparing-asset"></span><h2>Loading asset<a class="headerlink" href="#loading-asset" title="Permalink to this headline"></a></h2>
+<div class="section" id="using-lm-load-function">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">lm.load_*()</span></code> function<a class="headerlink" href="#using-lm-load-function" title="Permalink to this headline"></a></h3>
+<p><em>Asset</em> represents a component of the scene such as meshes or materials.
+To load an asset, you can use <code class="docutils literal notranslate"><span class="pre">lm.load_&lt;asset_type&gt;()</span></code> function, where <code class="docutils literal notranslate"><span class="pre">&lt;asset_type&gt;</span></code> is the name of the asset interface. For instance, <code class="docutils literal notranslate"><span class="pre">film</span></code> asset can be loaded by <code class="docutils literal notranslate"><span class="pre">lm.load_film()</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_film</span><span class="p">(</span><span class="s1">&#39;film1&#39;</span><span class="p">,</span> <span class="s1">&#39;bitmap&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">1920</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1080</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">lm.load_&lt;asset_type&gt;()</span></code> function takes three arguments. The first argument specifies the identifier of the asset, which is used to reference the asset internally. The second argument is the detailed name of the asset of the interface creating interface. The following arguments are the optional parameters to initialize the asset.</p>
+<p>In this example, we want to make <code class="docutils literal notranslate"><span class="pre">film</span></code> asset. This function takes the name of the asset (<code class="docutils literal notranslate"><span class="pre">film1</span></code>) and the type of the asset (<code class="docutils literal notranslate"><span class="pre">bitmap</span></code>) of the creating interface.</p>
+<p>The return value of the function is a reference to the interface type of the asset. For instance, <code class="docutils literal notranslate"><span class="pre">lm.load_film()</span></code> function returns a reference to <a class="reference internal" href="api_ref.html#_CPPv4N2lm4FilmE" title="lm::Film"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Film</span></code></a> class.  Using the reference, you can access the underlying member functions. For detail, please refer to <a class="reference internal" href="api_ref.html#api-ref"><span class="std std-ref">API reference</span></a>.</p>
+<p>If the asset with the same identifier is already registered,
+the function try to reload the assets and replace the old one.</p>
+</div>
+<div class="section" id="id2">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">lm.load()</span></code> function<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>Alternatively, we can use a general <code class="docutils literal notranslate"><span class="pre">lm.load()</span></code> function to load an asset. The arguments are almost same, but the type of the asset must contain the interface name (<code class="docutils literal notranslate"><span class="pre">film</span></code>) and the separator (<code class="docutils literal notranslate"><span class="pre">::</span></code>). This function is useful when you want to create an asset of user-defined interface type.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film_base</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">asset</span><span class="p">(</span><span class="s1">&#39;film1&#39;</span><span class="p">,</span> <span class="s1">&#39;film::bitmap&#39;</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">1920</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1080</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">lm.asset()</span></code> function returns an instance of <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> class, not the interface type of the asset (e.g., <a class="reference internal" href="api_ref.html#_CPPv4N2lm4FilmE" title="lm::Film"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Film</span></code></a>).
+<a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> is a base type of all assets. If you want to access the members of the specific type, you want to use <code class="docutils literal notranslate"><span class="pre">.cast()</span></code> function of the target interface.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Film</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">film_base</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For convenience, we will sometimes refer to a pair of asset interface and detailed asset type by <code class="docutils literal notranslate"><span class="pre">interface::name</span></code> format.
+For instance, <code class="docutils literal notranslate"><span class="pre">film::bitmap</span></code> or <code class="docutils literal notranslate"><span class="pre">material::diffuse</span></code> etc.</p>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-instance">
+<span id="id3"></span><h2>Accessing instance<a class="headerlink" href="#accessing-instance" title="Permalink to this headline"></a></h2>
+<p>The created instance is internally managed by the framework. This means the lifetime of the instance is not tied to the lifetime of the python object (e.g., <code class="docutils literal notranslate"><span class="pre">film1</span></code> variable). It is merely a reference to the instance internally managed in the framework.</p>
+<p>In addition to using the instance being returned by <code class="docutils literal notranslate"><span class="pre">lm.load_&lt;asset_type&gt;()</span></code> function, you can use <em>component locator</em> to access the instance. A component locator is a string starting with the character <code class="docutils literal notranslate"><span class="pre">$</span></code> and the words connected by <code class="docutils literal notranslate"><span class="pre">.</span></code>. A locator indicates a location of the instance managed by the framework.
+For instance, the locator of the <code class="docutils literal notranslate"><span class="pre">film1</span></code> asset is <code class="docutils literal notranslate"><span class="pre">$.assets.film1</span></code>. This can be obtained by <code class="docutils literal notranslate"><span class="pre">.loc()</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span><span class="o">.</span><span class="n">loc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can obtain the instance of the asset by the locator. <code class="docutils literal notranslate"><span class="pre">lm.get_&lt;asset_type&gt;()</span></code> function takes the locator as an argument and returns the instance. For instance, the following code gets the same instance as <code class="docutils literal notranslate"><span class="pre">film1</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">get_film</span><span class="p">(</span><span class="s1">&#39;$.assets.film1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similarly, the general <code class="docutils literal notranslate"><span class="pre">lm.get()</span></code> function returns an instance of <a class="reference internal" href="api_ref.html#_CPPv4N2lm9ComponentE" title="lm::Component"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Component</span></code></a> class, similarly to <code class="docutils literal notranslate"><span class="pre">lm.create_asset</span></code> function. You thus need to cast the type before use.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">Film</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;$.assets.film1&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The assets managed by the framework can be printed using <code class="docutils literal notranslate"><span class="pre">lm.debug.print_asset_tree()</span></code> function.</p>
+</div>
+</div>
+<div class="section" id="passing-instance-as-a-parameter">
+<h2>Passing instance as a parameter<a class="headerlink" href="#passing-instance-as-a-parameter" title="Permalink to this headline"></a></h2>
+<p>When we create an asset by <code class="docutils literal notranslate"><span class="pre">lm.load_&lt;asset_type&gt;()</span></code> function, we can pass an reference to the other asset as a parameter. For instance, <code class="docutils literal notranslate"><span class="pre">material::diffuse</span></code> takes a reference to a texture representing the diffuse reflectance of the material. You can pass the reference to the asset with the locator or the instance of the asset directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">texture</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_texture</span><span class="p">(</span><span class="s1">&#39;texture_constant&#39;</span><span class="p">,</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">material</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_material</span><span class="p">(</span><span class="s1">&#39;material_diffuse&#39;</span><span class="p">,</span> <span class="s1">&#39;diffuse&#39;</span><span class="p">,</span>
+    <span class="n">mapKd</span><span class="o">=</span><span class="n">texture</span>
+    <span class="c1"># or by locator</span>
+    <span class="c1"># mapKd=texture.loc()</span>
+    <span class="c1"># or directly</span>
+    <span class="c1"># mapKd=&#39;$.assets.texture_constant&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="scene-setup-using-primitives">
+<span id="making-scene"></span><h2>Scene setup using primitives<a class="headerlink" href="#scene-setup-using-primitives" title="Permalink to this headline"></a></h2>
+<p><em>Scene</em> represents a collection of objects to be rendered. A scene of Lightmetrica can be viewed as a collection of <em>primitives</em>. A primitive is an element of the scene which associates mesh or material etc. with transformation.</p>
+<div class="section" id="creating-scene-asset">
+<h3>Creating scene asset<a class="headerlink" href="#creating-scene-asset" title="Permalink to this headline"></a></h3>
+<p>A scene is a special asset. We can thus create the asset by <code class="docutils literal notranslate"><span class="pre">lm.load_scene()</span></code> function. The second argument is fixed to <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_scene</span><span class="p">(</span><span class="s1">&#39;scene&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Practically, a scene requires <em>acceleration structure</em> (interface type: <code class="docutils literal notranslate"><span class="pre">accel</span></code>). Since <code class="docutils literal notranslate"><span class="pre">accel</span></code> is also an asset, it can be created by <code class="docutils literal notranslate"><span class="pre">lm.load_accel()</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">accel</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_accel</span><span class="p">(</span><span class="s1">&#39;accel&#39;</span><span class="p">,</span> <span class="s1">&#39;sahbvh&#39;</span><span class="p">)</span>
+<span class="n">scene</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_scene</span><span class="p">(</span><span class="s1">&#39;scene&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">accel</span><span class="o">=</span><span class="n">accel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-primitive">
+<h3>Creating a primitive<a class="headerlink" href="#creating-a-primitive" title="Permalink to this headline"></a></h3>
+<p>Once a scene is loaded, you can create primitives using <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene13add_primitiveERK4Json" title="lm::Scene::add_primitive"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::add_primitive()</span></code></a> function.
+For instance, the following code creates a primitive associating <code class="docutils literal notranslate"><span class="pre">mesh1</span></code> and <code class="docutils literal notranslate"><span class="pre">material1</span></code> assets.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span><span class="o">.</span><span class="n">add_primitive</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-primitive-with-transformation">
+<h3>Creating a primitive with transformation<a class="headerlink" href="#creating-a-primitive-with-transformation" title="Permalink to this headline"></a></h3>
+<p>Additionally, you can use <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene25add_transformed_primitiveE4Mat4RK4Json" title="lm::Scene::add_transformed_primitive"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::add_transformed_primitive()</span></code></a> function to specify the transformation applied to the geometry. A transformation can be specified by 4x4 matrix.
+Specifically, by setting the transformation being identity matrix, the following code is equivalent to the above.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span><span class="o">.</span><span class="n">add_transformed_primitive</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">identity</span><span class="p">(),</span> <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can also create a primitive not being associated with <code class="docutils literal notranslate"><span class="pre">mesh</span></code>, like <code class="docutils literal notranslate"><span class="pre">camera</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span><span class="o">.</span><span class="n">add_primitive</span><span class="p">(</span><span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-primitive-generator">
+<h3>Using primitive generator<a class="headerlink" href="#using-primitive-generator" title="Permalink to this headline"></a></h3>
+<p>Some assets like <code class="docutils literal notranslate"><span class="pre">model</span></code> works as a <em>primitive generator</em>.
+If such an asset is specified, <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene13add_primitiveERK4Json" title="lm::Scene::add_primitive"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::add_primitive()</span></code></a> function internally generates multiple multiple primitives and add them to the scene.
+If a transformation is specified in this case, the same transformation is applied to all the primitives generated.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span><span class="o">.</span><span class="n">add_primitive</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="scene-setup-using-scene-graph">
+<h2>Scene setup using scene graph<a class="headerlink" href="#scene-setup-using-scene-graph" title="Permalink to this headline"></a></h2>
+<p>An advanced approach to configure a scene is to use <em>scene graph</em>. A scene graph can describe the relationship of the transformed primitives using tree-like structure (precisely, DAG: directed acyclic graph).</p>
+<div class="section" id="node-types">
+<h3>Node types<a class="headerlink" href="#node-types" title="Permalink to this headline"></a></h3>
+<p>The scene graph of Lightmetrica has three different node types: (1) primitive node, (2) transform group node, (3) instance group node.</p>
+<ol class="arabic simple">
+<li><p>A <em>primitive node</em> describes the association of geometry and material. In a scene graph, this node serves as a leaf node.</p></li>
+<li><p>A <em>transform group</em> describes the local transformation applied to the child nodes. The global transformation applied to a leaf node (primitive) by computing a product of local transformation stored in this node type.</p></li>
+<li><p>A <em>instance group</em> is a special group node to specify the child nodes are used as an instanced geometry. This information is used by some acceleration structures to reduce the memory footprint by reusing the acceleration structures for the underlying geometry. Unlike other types of nodes, this node type can have multiple parents.</p></li>
+</ol>
+</div>
+<div class="section" id="creating-a-node">
+<h3>Creating a node<a class="headerlink" href="#creating-a-node" title="Permalink to this headline"></a></h3>
+<p><a class="reference internal" href="api_ref.html#_CPPv4N2lm5SceneE" title="lm::Scene"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">lm::Scene</span></code></a> provides an interface to create a scene graph nodes.
+We can create each node type by (1) <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene21create_primitive_nodeERK4Json" title="lm::Scene::create_primitive_node"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::create_primitive_node()</span></code></a>, (2) <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene17create_group_nodeE4Mat4" title="lm::Scene::create_group_node"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::create_group_node()</span></code></a>, (3) <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene26create_instance_group_nodeEv" title="lm::Scene::create_instance_group_node"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::create_instance_group_node()</span></code></a> respectively.
+For detail, please visit the corresponding API reference.</p>
+<p>All these functions returns an integer index of the node. Scene graph nodes are managed inside a scene instance. The interfaces of the scene class allows the user to access or manipulate the scene graph structure using the index.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The root node of the scene graph is fixed to a transform group with identity transformation and its node index is fixed to zero. We can get the node index of the root node (=0) using <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene9root_nodeEv" title="lm::Scene::root_node"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::root_node()</span></code></a> function.</p>
+</div>
+</div>
+<div class="section" id="adding-a-node-to-scene-graph">
+<h3>Adding a node to scene graph<a class="headerlink" href="#adding-a-node-to-scene-graph" title="Permalink to this headline"></a></h3>
+<p>Note that a newly created node is <em>floating</em>, because the node is not yet added to the scene graph. This means we need to connect the created node to an existing node in the scene graph.</p>
+<p>We can add a child node to the existing node in the scene graph with <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene9add_childEii" title="lm::Scene::add_child"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::add_child()</span></code></a> function, where the first argument is the index of the node to add a new node, and the second argument being the index of the node being added. For instance, the following snippet creates primitive (<code class="docutils literal notranslate"><span class="pre">p</span></code>) and transformation group (<code class="docutils literal notranslate"><span class="pre">t</span></code>) nodes, where (1) <code class="docutils literal notranslate"><span class="pre">p</span></code> is added to <code class="docutils literal notranslate"><span class="pre">t</span></code>, and (2) <code class="docutils literal notranslate"><span class="pre">t</span></code> is added to the root node.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">create_primitive_node</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">create_group_node</span><span class="p">(</span><span class="o">&lt;</span><span class="n">transformation_matrix</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>                   <span class="c1"># (1)</span>
+<span class="n">scene</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">root_node</span><span class="p">(),</span> <span class="n">t</span><span class="p">)</span>   <span class="c1"># (2)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="building-acceleration-structure">
+<h2>Building acceleration structure<a class="headerlink" href="#building-acceleration-structure" title="Permalink to this headline"></a></h2>
+<p>If we loaded the scene with acceleration structure,
+we need to execute the post-process to construct the acceleration structure
+after the completion of the scene setup.
+This can be done by calling <a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene5buildEv" title="lm::Scene::build"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::build()</span></code></a> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scene</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="api_ref.html#_CPPv4N2lm5Scene5buildEv" title="lm::Scene::build"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Scene::build()</span></code></a> function must be called whenever after the structural modification happens to the scene.</p>
+</div>
+</div>
+<div class="section" id="rendering">
+<h2>Rendering<a class="headerlink" href="#rendering" title="Permalink to this headline"></a></h2>
+<p>We need a <em>renderer</em> asset to render an image. The renderer asset can be loaded using <code class="docutils literal notranslate"><span class="pre">lm.load_renderer()</span></code> function.
+Typically, a renderer takes <code class="docutils literal notranslate"><span class="pre">scene</span></code> asset to be rendered and <code class="docutils literal notranslate"><span class="pre">film</span></code> into which the renderer outputs.
+For instance, if you want to load <code class="docutils literal notranslate"><span class="pre">renderer::raycast</span></code> asset, you will write:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">load_renderer</span><span class="p">(</span><span class="s1">&#39;renderer&#39;</span><span class="p">,</span> <span class="s1">&#39;raycast&#39;</span><span class="p">,</span>
+    <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">film</span><span class="p">,</span>
+    <span class="c1"># additional parameters to configure renderer::raycast</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can execute the rendering process by calling <a class="reference internal" href="api_ref.html#_CPPv4NK2lm8Renderer6renderEv" title="lm::Renderer::render"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Renderer::render()</span></code></a> function.
+Once finished, the rendered image will be written into the specified <code class="docutils literal notranslate"><span class="pre">film</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-result">
+<h2>Checking result<a class="headerlink" href="#checking-result" title="Permalink to this headline"></a></h2>
+<div class="section" id="saving-rendered-image">
+<h3>Saving rendered image<a class="headerlink" href="#saving-rendered-image" title="Permalink to this headline"></a></h3>
+<p>You can save the rendered image using <a class="reference internal" href="api_ref.html#_CPPv4NK2lm4Film4saveERKNSt6stringE" title="lm::Film::save"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Film::save()</span></code></a> function.
+The function takes a path to the output image as an argument.
+The output type is automatically inferred by the extension of the filename.
+The supported image format depends on the using <code class="docutils literal notranslate"><span class="pre">film</span></code> asset type.
+For instance, <code class="docutils literal notranslate"><span class="pre">film::bitmap</span></code> supports some typical formats like <code class="docutils literal notranslate"><span class="pre">.hdr</span></code>, <code class="docutils literal notranslate"><span class="pre">.png</span></code>, etc.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">film</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;&lt;image_path&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="displaying-rendered-image">
+<h3>Displaying rendered image<a class="headerlink" href="#displaying-rendered-image" title="Permalink to this headline"></a></h3>
+<p>When we are using Jupyter notebook, it is useful to directly visualize the rendered image in the same notebook using <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>.</p>
+<p>To do this, we need to aceess the underlying image data and feed it to the library.
+The underlying image data of <code class="docutils literal notranslate"><span class="pre">film</span></code> can be obtained by <a class="reference internal" href="api_ref.html#_CPPv4N2lm4Film6bufferEv" title="lm::Film::buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Film::buffer()</span></code></a> function.
+For convenience, the image data can be accessed as a <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>, which can be directly feed into <code class="docutils literal notranslate"><span class="pre">.imshow()</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">film</span><span class="o">.</span><span class="n">buffer</span><span class="p">())</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.2</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="api_ref.html#_CPPv4N2lm4Film6bufferEv" title="lm::Film::buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Film::buffer()</span></code></a> function does not make a copy of the internal image data. If the internal state changes, for instance when you dispatch the renderer again, the buffer becomes invalid. You thus want to explicitly copy the buffer if you need to use it afterwards, e.g., with <code class="docutils literal notranslate"><span class="pre">np.copy()</span></code> function.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The image data obtained with <a class="reference internal" href="api_ref.html#_CPPv4N2lm4Film6bufferEv" title="lm::Film::buffer"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">lm::Film::buffer()</span></code></a> function is not gamma corrected.
+You want to apply gamma correction before the image is visualized.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="managing_experiment.html" class="btn btn-neutral float-left" title="Managing experiments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="extending_framework.html" class="btn btn-neutral float-right" title="Extending framework" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Hisanari Otsu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
